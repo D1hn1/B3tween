@@ -15,8 +15,20 @@ import com.B3tween.app.objects.enums.Method;
 @Builder
 public class requestDto {
     private Method method;
-    private String URI;
+    private uriDto URL;
     private String httpVersion;
     private List<headerDto> headers;
     private String data;
+
+    public static requestDto request(Method method, uriDto URL, String httpVersion,
+                                     List<headerDto> headers, String data) {
+
+        return requestDto.builder()
+                        .method(method)
+                        .URL(URL)
+                        .httpVersion(httpVersion != null ? httpVersion : "HTTP/1.1")
+                        .headers(headers)
+                        .data(data)
+                        .build();
+    }
 }
