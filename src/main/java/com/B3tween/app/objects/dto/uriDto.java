@@ -30,8 +30,8 @@ public class uriDto {
         int urlLength = URL.length();
 
         // dto.protocol
-        dto.protocol = URL.startsWith("https") ? "https" : null;
-        dto.protocol = URL.startsWith("http") ? "http" : null;
+        dto.protocol = URL.startsWith("https") ? "https" :
+                        URL.startsWith("http") ? "http" : null;
 
         if (dto.protocol == null)
             throw new Exception("Malformed.Url");
@@ -42,7 +42,6 @@ public class uriDto {
         for (int x = offset; x < urlLength; x++) {
             if (URL.charAt(x) == ':' || URL.charAt(x) == '/') {
                 isPort = List.of(':').contains(URL.charAt(x)) ? true : false;
-                isPath = List.of('/').contains(URL.charAt(x)) ? true : false;
                 dto.host = URL.substring(offset, x);
                 break;
             } else {
@@ -75,10 +74,12 @@ public class uriDto {
         if (isPath) {
 
             int offsetIfPort = isPort ? (dto.port.length() + 1) : 0;
-            offset = (dto.host.length() + dto.protocol.length() + 3 + offsetIfPort); // MARK: fix nullpointer exception
+            offset = (dto.host.length() + dto.protocol.length() + 3 + offsetIfPort);
             if (List.of('/').contains(URL.charAt(offset))) {
                 dto.path = URL.substring(offset, urlLength);
             }
+        } else {
+            dto.path = "/";
 
         }
 
