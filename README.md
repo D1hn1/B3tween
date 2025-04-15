@@ -1,3 +1,10 @@
+# TODO
+- [X] Make a builder for the DTO entities.
+- [ ] Make a handler for the incoming http request.
+- [X] End with the urlDto class.
+- [ ] Write the makeRequest function.
+- [ ] Try it out with foxyproxy.
+
 # Steps to Create a Proxy Server
 
 1. Choose a programming language and tools (e.g., Python, Node.js, Java).
@@ -11,13 +18,6 @@
 9. Optionally, implement support for other HTTP methods (POST, PUT, etc.).
 10. Test your proxy using tools like curl, a browser, or Postman.
 11. (Optional) Add extra features like logging, filtering, caching, authentication, or HTTPS support.
-
-# TODO
-- [X] Make a builder for the DTO entities.
-- [ ] Make a handler for the incoming http request.
-- [ ] End with the urlDto class.
-- [ ] Write the makeRequest function.
-- [ ] Try it out with foxyproxy.
 
 # Types of Proxy Servers
 
