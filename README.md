@@ -13,11 +13,11 @@
 11. (Optional) Add extra features like logging, filtering, caching, authentication, or HTTPS support.
 
 # TODO
-[X] Make a builder for the DTO entities.
-[ ] Make a handler for the incoming http request.
-[ ] End with the urlDto class.
-[ ] Write the makeRequest function.
-[ ] Try it out with foxyproxy.
+- [X] Make a builder for the DTO entities.
+- [ ] Make a handler for the incoming http request.
+- [ ] End with the urlDto class.
+- [ ] Write the makeRequest function.
+- [ ] Try it out with foxyproxy.
 
 # Types of Proxy Servers
 
