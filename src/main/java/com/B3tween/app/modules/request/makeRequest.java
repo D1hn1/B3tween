@@ -1,35 +1,21 @@
 package com.B3tween.app.modules.request;
 
-import java.io.*;
-import java.net.*;
-
 //import com.B3tween.app.objects.dto.uriDto;
 //import com.B3tween.app.objects.enums.Method;
 //import com.B3tween.app.objects.dto.responseDto;
 import com.B3tween.app.objects.dto.requestDto;
+import com.B3tween.app.modules.socket.initializeSocket;
 
 /**
  * Makes a request to a web server.
+ * @throws Exception If socket connection fails.
  * @return responseDto.
  */
 public class makeRequest {
     
     public static void request(requestDto requestData) throws Exception {
 
-        // set up socket conn
-        String socketHost = requestData.getURL().getHost();
-        int socketPort = requestData.getURL().getPort() != null ?
-                         Integer.parseInt(requestData.getURL().getPort()) :
-                         requestData.getURL().getProtocol() == "http" ? 80 : 443;
-
-        Socket socket;
-
-        try {
-            socket = new Socket(socketHost, socketPort);
-        } catch (UnknownHostException e) {
-            System.err.println("Error " + e);
-            throw new Exception("Error.Socket.Connection");
-        }
+        initializeSocket socket = new initializeSocket(requestData);
 
         // filter protocols (http, https)
         if (requestData.getURL().getProtocol() == "http") {
@@ -45,26 +31,24 @@ public class makeRequest {
                                      "User-Agent: Mozilla/5.0\r\n\r\n";
                     
                     // send request
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    
-                    out.println(request);
-                    String response = in.readLine();
-                    System.out.println(response);
+                    socket.send(request);
+                    socket.recv().forEach(line -> {
+                        System.out.println(line);
+                    });
 
                     break;
 
                 default:
-                    socket.close();
+                    socket.closeSocket();
                     throw new Exception("Method.Not.Implemented");
             }
 
         } else if (requestData.getURL().getProtocol() == "https") {
-            socket.close();
+            socket.closeSocket();
             throw new Exception("Https.Not.Implemented");
         }
 
-        socket.close();
+        socket.closeSocket();
     }
 
 }

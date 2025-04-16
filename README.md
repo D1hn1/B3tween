@@ -1,7 +1,9 @@
 # TODO
 - [X] Make a builder for the DTO entities.
+- [ ] Add request.toString() or something like that 
 - [ ] Make a handler for the incoming http request.
 - [X] End with the urlDto class.
+ 
 - [ ] Write the makeRequest function.
 - [ ] Try it out with foxyproxy.
 
