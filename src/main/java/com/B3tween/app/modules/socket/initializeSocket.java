@@ -5,9 +5,12 @@ import java.net.*;
 import java.util.stream.Stream;
 import com.B3tween.app.objects.dto.requestDto;
 
+import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.objects.enums.Exceptions;
+
 /**
  * Initializes a Socket for better handling.
- * @throws Exception If connection fails.
+ * @throws bException If connection fails.
  */
 public class initializeSocket {
 
@@ -16,7 +19,7 @@ public class initializeSocket {
     private BufferedReader in;
 
     // constructor
-    public initializeSocket(requestDto requestData) throws Exception {
+    public initializeSocket(requestDto requestData) throws bException  {
 
         String socketHost = requestData.getURL().getHost();
         int socketPort = requestData.getURL().getPort() != null ?
@@ -25,17 +28,16 @@ public class initializeSocket {
 
         try {
             socket = new Socket(socketHost, socketPort);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
 
         } catch (UnknownHostException ex) {
-            throw new Exception("Error.Socket.Connection: " + ex);
+            throw new bException(Exceptions.UNKNOWN_HOST, ex.getMessage());
 
         } catch (IOException iex) {
-            throw new Exception("Error.Socket.Connection: " +iex);
+            throw new bException(Exceptions.IO_CONN_ERR, iex.getMessage());
 
         }
-
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
 
     }
 
@@ -61,11 +63,11 @@ public class initializeSocket {
      * Closes the opened socket.
      * @throws Exception If closing the socket fails.
      */
-    public void closeSocket() throws Exception {
+    public void closeSocket() throws bException {
         try {
             socket.close();
         } catch (IOException iex) {
-            throw new Exception("Socket.Close.Error: " + iex);
+            throw new bException(Exceptions.SOCKET_CLOSE_ERROR, iex.getMessage());
         }
     }
 

@@ -20,6 +20,15 @@ public class requestDto {
     private List<headerDto> headers;
     private String data;
 
+    /**
+     * Request builder
+     * @param method
+     * @param URL
+     * @param httpVersion
+     * @param headers
+     * @param data
+     * @return requestDto
+     */
     public static requestDto request(Method method, uriDto URL, String httpVersion,
                                      List<headerDto> headers, String data) {
 
@@ -31,4 +40,26 @@ public class requestDto {
                         .data(data)
                         .build();
     }
+
+    /**
+     * Converts the request to string
+     * @return String
+     */
+    public String toString() {
+
+        StringBuilder request = new StringBuilder();
+
+        request.append(method + " " + URL.getPath() + " " + httpVersion + "\r\n" +
+                        "Host: " + URL.getHost() + "\r\n" +
+                        "User-Agent: Mozilla/5.0\r\n");
+        
+        headers.forEach(header -> {
+            request.append(header.getKey() + ": " + header.getValue() + "\r\n");
+        });
+
+        request.append("\r\n" + (data == null ? "" : data));
+
+        return request.toString();
+    }
+
 }
