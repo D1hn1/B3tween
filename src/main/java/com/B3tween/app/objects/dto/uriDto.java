@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
 
+import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.objects.enums.Exceptions;
+
 /**
  * Class: Definition the URI dto entity.
  * Function: Parses the URL with: protocol, host, port & path.
- * @throws Exception if the URL is malformed.
+ * @throws bException if the URL is malformed.
  * @return uriDto entity.
  */
 @Getter
@@ -18,11 +21,11 @@ public class uriDto {
     private String port;
     private String path;
 
-    public static uriDto url(String URL) throws Exception {
+    public static uriDto url(String URL) throws bException {
         return parseUrl(URL);
     }
 
-    private static uriDto parseUrl(String URL) throws Exception {
+    private static uriDto parseUrl(String URL) throws bException {
         
         Boolean isPort = false;
         Boolean isPath = false;
@@ -34,7 +37,7 @@ public class uriDto {
                         URL.startsWith("http") ? "http" : null;
 
         if (dto.protocol == null)
-            throw new Exception("Malformed.Url");
+            throw new bException(Exceptions.MALFORMED_URL, "");
 
         // dto.host
         int offset = (dto.protocol.length() + 3);

@@ -1,10 +1,11 @@
 package com.B3tween.app.modules.request;
 
-//import com.B3tween.app.objects.dto.uriDto;
-//import com.B3tween.app.objects.enums.Method;
-//import com.B3tween.app.objects.dto.responseDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.socket.initializeSocket;
+
+import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.objects.enums.Exceptions;
+import com.B3tween.app.modules.log.Log;
 
 /**
  * Makes a request to a web server.
@@ -13,39 +14,26 @@ import com.B3tween.app.modules.socket.initializeSocket;
  */
 public class makeRequest {
     
-    public static void request(requestDto requestData) throws Exception {
+    public static void request(requestDto requestData) throws bException {
+
+        // Log requests
+        Log.i("Request sent to " + requestData.getURL().getProtocol() + "://" +
+            requestData.getURL().getHost() + requestData.getURL().getPath());
 
         initializeSocket socket = new initializeSocket(requestData);
 
         // filter protocols (http, https)
         if (requestData.getURL().getProtocol() == "http") {
 
-            // filter methods (GET, POST, ...)
-            switch (requestData.getMethod()) {
-                
-                case GET:
-
-                    // set up request
-                    String request = requestData.getMethod() + " " + requestData.getURL().getPath() + " " + requestData.getHttpVersion() + "\r\n" +
-                                     "Host: " + requestData.getURL().getHost() + "\r\n" +
-                                     "User-Agent: Mozilla/5.0\r\n\r\n";
-                    
-                    // send request
-                    socket.send(request);
-                    socket.recv().forEach(line -> {
-                        System.out.println(line);
-                    });
-
-                    break;
-
-                default:
-                    socket.closeSocket();
-                    throw new Exception("Method.Not.Implemented");
-            }
+            // send request
+            socket.send(requestData.toString());
+            socket.recv().forEach(line -> {
+                System.out.println(line);
+            });
 
         } else if (requestData.getURL().getProtocol() == "https") {
             socket.closeSocket();
-            throw new Exception("Https.Not.Implemented");
+            throw new bException(Exceptions.HTTPS_NOT_IMPLEMENTED, "");
         }
 
         socket.closeSocket();
