@@ -1,9 +1,10 @@
 # TODO
 - [X] Make a builder for the DTO entities.
 - [X] End with the urlDto class.
-- [ ] Add request.toString() or something like that 
+- [X] Add request.toString() or something like that 
+- [ ] Add a parse function in requestDto to get from a raw String a responseDto object
 
-- [ ] Add a Log and Exception classes of my own.
+- [X] Add a Log and Exception classes of my own.
  
 - [ ] Make a handler for the incoming http request.
 

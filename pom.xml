@@ -4,7 +4,7 @@
   <groupId>com.B3tween.app</groupId>
   <artifactId>B3tween</artifactId>
   <packaging>jar</packaging>
-  <version>v1.4</version>
+  <version>v2.0</version>
   <name>B3tween</name>
   <url>http://maven.apache.org</url>
   <dependencies>
