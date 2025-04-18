@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.log;
+package com.B3tween.app.modules.exception;
 
 import com.B3tween.app.objects.enums.Exceptions;
 
