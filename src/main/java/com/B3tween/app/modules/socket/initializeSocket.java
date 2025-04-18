@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.stream.Stream;
 import com.B3tween.app.objects.dto.requestDto;
 
-import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 
 /**

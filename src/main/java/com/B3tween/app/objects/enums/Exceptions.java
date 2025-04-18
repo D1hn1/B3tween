@@ -13,7 +13,8 @@ public enum Exceptions {
     UNKNOWN_HOST("Host not found"),
     IO_CONN_ERR("IO Socket connection error"),
     SOCKET_CLOSE_ERROR("Socket close error"),
-    MALFORMED_URL("Malformed URL");
+    MALFORMED_URL("Malformed URL"),
+    METHOD_NOT_SUPPORTED("HTTP method not found or not supported");
     
     private String label;
 

@@ -3,13 +3,13 @@ package com.B3tween.app.modules.request;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.socket.initializeSocket;
 
-import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 import com.B3tween.app.modules.log.Log;
 
 /**
  * Makes a request to a web server.
- * @throws Exception If socket connection fails.
+ * @throws bException If socket connection fails.
  * @return responseDto.
  */
 public class makeRequest {
