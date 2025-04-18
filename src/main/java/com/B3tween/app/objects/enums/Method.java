@@ -1,6 +1,7 @@
 package com.B3tween.app.objects.enums;
 
 import lombok.Getter;
+import com.B3tween.app.modules.exception.bException;
 
 /**
  * Definition of a Method enum.
@@ -22,5 +23,20 @@ public enum Method {
 
     Method(String label) {
         this.label = label;
+    }
+
+    /**
+     * Gets the enum Method.
+     * @param method String.
+     * @return Method entity.
+     * @throws bException If method is not found.
+     */
+    public static Method getMethod(String method) throws bException {
+        for (Method thisMethod : Method.values()) {
+            if (thisMethod.getLabel().toUpperCase().equals(method.toUpperCase())) {
+                return thisMethod;
+            }
+        }
+        throw new bException(Exceptions.METHOD_NOT_SUPPORTED, method);
     }
 }
