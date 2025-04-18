@@ -2,7 +2,8 @@
 - [X] Make a builder for the DTO entities.
 - [X] End with the urlDto class.
 - [X] Add request.toString() or something like that 
-- [ ] Add a parse function in requestDto to get from a raw String a responseDto object
+- [X] Add a parse function in requestDto to get from a raw String a requestDto object
+- [ ] Add a parse function in responseDto to get from a raw String a responseDto object
 
 - [X] Add a Log and Exception classes of my own.
  
