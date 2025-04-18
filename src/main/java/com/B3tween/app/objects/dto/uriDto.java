@@ -2,9 +2,10 @@ package com.B3tween.app.objects.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Builder;
 import java.util.List;
 
-import com.B3tween.app.modules.log.bException;
+import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 
 /**
@@ -15,21 +16,27 @@ import com.B3tween.app.objects.enums.Exceptions;
  */
 @Getter
 @Setter
+@Builder
 public class uriDto {
     private String protocol;
     private String host;
     private String port;
     private String path;
 
-    public static uriDto url(String URL) throws bException {
-        return parseUrl(URL);
+    public static uriDto url(String protocol, String host, String port, String path) {
+        return uriDto.builder()
+            .protocol(protocol)
+            .host(host)
+            .port(port)
+            .path(path)
+            .build();
     }
 
-    private static uriDto parseUrl(String URL) throws bException {
+    public static uriDto parseUrl(String URL) throws bException {
         
         Boolean isPort = false;
         Boolean isPath = false;
-        uriDto dto = new uriDto();
+        uriDto dto = new uriDto(null, null, null, null);
         int urlLength = URL.length();
 
         // dto.protocol
