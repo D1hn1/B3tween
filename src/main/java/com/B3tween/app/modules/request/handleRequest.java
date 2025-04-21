@@ -14,7 +14,9 @@ import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.log.Log;
 
 public class handleRequest {
-    
+    // TODO: Change the User-Agent header for a custom one
+    // TODO: Separate the function that reads from the server and others
+    // TODO: Find a way so i can save and load values from the (disk drive or the ram) into the code
     /**
      * 
      */
