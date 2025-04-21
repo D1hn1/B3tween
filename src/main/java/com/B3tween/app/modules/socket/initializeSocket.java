@@ -4,27 +4,27 @@ import java.io.*;
 import java.net.*;
 import java.util.stream.Stream;
 import com.B3tween.app.objects.dto.requestDto;
-
+import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 
-/**
- * Initializes a Socket for better handling.
- * @throws bException If connection fails.
- */
 public class initializeSocket {
 
-    private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    public Socket socket;
+    public PrintWriter out;
+    public BufferedReader in;
 
-    // constructor
+    /**
+     * Constructor
+     */
     public initializeSocket(requestDto requestData) throws bException  {
 
         String socketHost = requestData.getURL().getHost();
         int socketPort = requestData.getURL().getPort() != null ?
                          Integer.parseInt(requestData.getURL().getPort()) :
                          requestData.getURL().getProtocol() == "http" ? 80 : 443;
+        
+        Log.l("Opened connection to " + socketHost + ":" + socketPort);
 
         try {
             socket = new Socket(socketHost, socketPort);
