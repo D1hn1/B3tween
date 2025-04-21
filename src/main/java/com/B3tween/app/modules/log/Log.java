@@ -2,10 +2,6 @@ package com.B3tween.app.modules.log;
 
 import java.time.LocalDateTime;
 
-/**
- * Definition of Log
- * @returns void
- */
 public class Log {
     
     private static String RED     = "\u001B[31m";

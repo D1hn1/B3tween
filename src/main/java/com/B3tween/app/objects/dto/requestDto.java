@@ -11,10 +11,6 @@ import com.B3tween.app.objects.enums.Exceptions;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Method;
 
-/**
- * Definition of DTO request.
- * @return String, List<headerDto>, Method.
- */
 @Getter
 @Setter
 @Builder

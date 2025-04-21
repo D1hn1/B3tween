@@ -4,10 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 
-/**
- * Definition of DTO of headers
- * @return String
- */
 @Getter
 @Setter
 @Builder

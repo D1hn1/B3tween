@@ -2,10 +2,6 @@ package com.B3tween.app.objects.enums;
 
 import lombok.Getter; 
 
-/**
- * Definition of Exceptions for
- * modules/log/bException.java.
- */
 @Getter
 public enum Exceptions {
     METHOD_NOT_IMPLEMENTED("Method not implemented"),
