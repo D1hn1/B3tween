@@ -53,7 +53,7 @@ public class requestDto {
         headers.forEach(header -> {
             request.append(header.getKey() + ": " + header.getValue() + "\r\n");
         });
-        request.append("\r\n" + (data == null ? "" : data));
+        request.append("\r\n" + (data == null ? "" : data)).append("\r\n");
 
         return request.toString();
     }
@@ -149,9 +149,6 @@ public class requestDto {
                 isKey = true;
                 returnHeaders.add(headerDto.header(key, value));
             }
-
-            if (request.charAt(x) == '\r' && request.charAt(x + 2) == '\r')
-                break;
 
         }
 

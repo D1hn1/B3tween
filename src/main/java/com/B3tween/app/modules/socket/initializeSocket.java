@@ -24,7 +24,7 @@ public class initializeSocket {
                          Integer.parseInt(requestData.getURL().getPort()) :
                          requestData.getURL().getProtocol() == "http" ? 80 : 443;
         
-        Log.l("Opened connection to " + socketHost + ":" + socketPort);
+        Log.i("Opened connection to " + socketHost + ":" + socketPort);
 
         try {
             socket = new Socket(socketHost, socketPort);

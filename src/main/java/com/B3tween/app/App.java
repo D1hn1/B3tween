@@ -1,8 +1,9 @@
 package com.B3tween.app;
 
-import com.B3tween.app.modules.request.makeRequest;
-//import com.B3tween.app.objects.dto.*;
-//import com.B3tween.app.objects.enums.*;
+import java.io.IOException;
+
+import com.B3tween.app.modules.handler.listener.*;
+import com.B3tween.app.modules.exception.bException;
 
 /**
  * Hello world!
@@ -12,6 +13,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        makeRequest.get();
+        try {
+            new Listener(8080);
+        } catch (IOException ioe) {}
     }
 }
