@@ -2,12 +2,27 @@ package com.B3tween.app.modules.handler.utils;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
 import com.B3tween.app.objects.dto.*;
 import com.B3tween.app.modules.log.*;
 import com.B3tween.app.modules.exception.bException;
+import com.B3tween.app.objects.global.globalRuntime;
 
 public class handlerUtils {
 
+    /**
+     * Generate next id for the Connection DTO.
+     * @return The next id.
+     */
+    public static int getNextId() {
+        return globalRuntime.connectionId++;
+    }
+
+    /**
+     * Get the first request from the client.
+     * @param clientSocket Client socket.
+     * @return The request parsed.
+     */
     public static requestDto getRequest(Socket clientSocket) {
 
         try {
@@ -33,8 +48,46 @@ public class handlerUtils {
             Log.e(be.getMessage());
             return null;
 
-        } 
+        }
         
+    }
+
+    /**
+     * Closes all the running connections
+     */
+    public static void closeAllConnections() {
+        if (globalRuntime.connectionList != null) {
+            globalRuntime.connectionList.forEach(conn -> {
+                try {
+                    conn.getClientSocket().close();
+                } catch (IOException io) {};
+            });
+        }
+    }
+
+    public static class responses {
+
+        /**
+         * Returns a 407 when the client is unauthorized
+         * @param clientSocket The client socket
+         */
+        public static void proxyAuthenticationRequired(Socket clientSocket) {
+            // HTTP/1.1 407 Proxy Authentication Required
+            // Proxy-Authenticate: Basic realm="Proxy requires authentication"
+            try {
+                String data = "Bad credentials. Closing connection\n";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 407, 
+                            "Proxy Authentication Required", 
+                            List.of(headerDto.header("Proxy-Authenticate", "Basic realm=\"Proxy requires authentication\""),
+                                    headerDto.header("Content-Length", ""+data.length())), 
+                            data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+
     }
 
 }

@@ -7,8 +7,6 @@ import lombok.Builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.B3tween.app.modules.exception.bException;
-
 @Getter
 @Setter
 @Builder
@@ -20,13 +18,13 @@ public class responseDto {
     private String data;
 
     /**
-     * 
-     * @param httpVersion
-     * @param statusCode
-     * @param reasonPhrase
-     * @param headers
-     * @param data
-     * @return
+     * Response entity builder.
+     * @param httpVersion Http version.
+     * @param statusCode Response status code.
+     * @param reasonPhrase Phrase of the status code.
+     * @param headers List of headers.
+     * @param data Data contained in the response.
+     * @return a responseDto entity.
      */
     public static responseDto response(String httpVersion, int statusCode, String reasonPhrase, 
                                         List<headerDto> headers, String data ) {
@@ -41,7 +39,7 @@ public class responseDto {
     }
 
     /**
-     * 
+     * Converts a responseDto to String.
      */
     public String toString() {
         StringBuilder response = new StringBuilder();
@@ -54,7 +52,7 @@ public class responseDto {
     }
 
     /**
-     * 
+     * Parses a raw String of a response.
      */
     public static responseDto parseResponse(String response) {
 

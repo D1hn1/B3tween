@@ -1,8 +1,7 @@
 package com.B3tween.app.modules.handler.listener;
 
-import java.net.*;
 import java.io.*;
-import java.util.List;
+import java.net.*;
 import java.util.concurrent.*;
 
 import com.B3tween.app.modules.log.Log;
@@ -18,23 +17,6 @@ import com.B3tween.app.objects.enums.Exceptions;
 
 public class Listener {
     
-    public static void proxyAuthenticationRequired(Socket clientSocket) {
-        // HTTP/1.1 407 Proxy Authentication Required
-        // Proxy-Authenticate: Basic realm="Proxy requires authentication"
-        try {
-            String data = "Bad credentials. Closing connection\n";
-            BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            responseDto response = responseDto.response("HTTP/1.1", 407, 
-                        "Proxy Authentication Required", 
-                        List.of(headerDto.header("Proxy-Authenticate", "Basic realm=\"Proxy requires authentication\""),
-                                headerDto.header("Content-Length", ""+data.length())), 
-                        data);
-            clientOut.write(response.toString());
-            clientOut.flush();
-        } catch (IOException io) {}
-        
-    }
-
     /**
      * Listener class
      * @param port Port to listen on
@@ -55,6 +37,8 @@ public class Listener {
                 Log.e("Error while closing the socket " + io);
             };
 
+            // Close all client connections & stop server
+            handlerUtils.closeAllConnections();
             globalRuntime.RUNNING = false;
             Log.i("Ctrl-c pressed exiting");
         }));
@@ -71,10 +55,10 @@ public class Listener {
             if (globalRuntime.PROXY_AUTHENTICATION) {
 
                 if (authProxyImpl.validateLogin(proxyRequest)) {
-                    Log.i("Client: " + clientSocket.getRemoteSocketAddress() + " success auth");
+                    Log.i("Client: " + clientSocket.getRemoteSocketAddress() + " authenticated");
                     pool.submit(() -> handler.Handler(clientSocket, proxyRequest));
                 } else {
-                    proxyAuthenticationRequired(clientSocket);
+                    handlerUtils.responses.proxyAuthenticationRequired(clientSocket);
                     Log.e("Client: " + clientSocket.getRemoteSocketAddress() + " failed auth");
                 }
 
