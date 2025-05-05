@@ -20,4 +20,7 @@ public class globalRuntime {
     public static int connectionId;
     public static List<connectionDto> connectionList = new ArrayList<>();
 
+    // Constants
+    public static int PROXY_PORT = 8080;
+
 }
