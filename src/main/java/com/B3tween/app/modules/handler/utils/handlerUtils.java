@@ -31,7 +31,7 @@ public class handlerUtils {
             BufferedReader clientIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             // Get request
-            String line;
+            String line = "";
             StringBuilder response = new StringBuilder();
             while (!(line = clientIn.readLine()).isEmpty()) {
                 response.append(line).append("\r\n");
@@ -87,6 +87,29 @@ public class handlerUtils {
             } catch (IOException io) {}
         }
 
+        /**
+         * Returns a 502 when the server is unricheable.
+         * @param clientSocket The client socket.
+         */
+        public static void proxyBadGateway(Socket clientSocket) {
+            // HTTP/1.1 502 Bad Gateway
+            //Content-Type: text/html
+            //Content-Length: 123
+            //502 Bad Gateway
+            //Unable to connect to the host
+            try {
+                String data = "502 Bad Gateway\nUnable to connect to the host";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 502,
+                            "Bad Gateway",
+                            List.of(headerDto.header("Content-Type", "text/html"),
+                                    headerDto.header("Content-Length", ""+data.length())),
+                            data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+
+        }
 
     }
 
