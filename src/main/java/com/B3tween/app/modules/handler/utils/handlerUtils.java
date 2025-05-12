@@ -111,6 +111,23 @@ public class handlerUtils {
 
         }
 
+        /**
+         * Returns a 200 when the server connects to a http service correctly.
+         * @param clientSocket The client socket.
+         */
+        public static void connectionEstablished(Socket clientSocket) {
+            // 200 Connection Established
+            // Proxy-Agent: B3tween/1.1
+            try {
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 200, 
+                    "Connection Established",
+                    List.of(headerDto.header("Proxy-Agent", "B3tween/1.1")), null);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
     }
 
 }
