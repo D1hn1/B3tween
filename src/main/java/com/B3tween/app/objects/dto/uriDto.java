@@ -6,7 +6,6 @@ import lombok.Builder;
 import java.util.List;
 
 import com.B3tween.app.modules.exception.bException;
-import com.B3tween.app.objects.enums.Exceptions;
 
 @Getter
 @Setter
@@ -51,10 +50,8 @@ public class uriDto {
         dto.protocol = URL.startsWith("https") ? "https" :
                         URL.startsWith("http") ? "http" : null;
 
-        if (dto.protocol == null) {
-            dto.path = "/";
+        if (dto.protocol == null)
             return dto;
-        }
 
 
         // dto.host
