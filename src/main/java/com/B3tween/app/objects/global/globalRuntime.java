@@ -2,7 +2,12 @@ package com.B3tween.app.objects.global;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import lombok.Setter;
+
+import com.B3tween.app.modules.auth.dto.authDto;
 import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
 
 @Setter
@@ -19,5 +24,15 @@ public class globalRuntime {
     // connectionDto list
     public static int connectionId;
     public static List<connectionDto> connectionList = new ArrayList<>();
+
+    // authDto list
+    public static int authId;
+    public static List<authDto> authList = new ArrayList<>();
+
+    // Thread pool
+    public static ExecutorService threadPool = Executors.newCachedThreadPool();
+
+    // JWT Secret
+    public static String JWTSecret = "secret-word";
 
 }

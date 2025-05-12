@@ -51,8 +51,11 @@ public class uriDto {
         dto.protocol = URL.startsWith("https") ? "https" :
                         URL.startsWith("http") ? "http" : null;
 
-        if (dto.protocol == null)
-            throw new bException(Exceptions.MALFORMED_URL, "");
+        if (dto.protocol == null) {
+            dto.path = "/";
+            return dto;
+        }
+
 
         // dto.host
         int offset = (dto.protocol.length() + 3);
