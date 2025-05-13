@@ -18,14 +18,15 @@ public class initializeHttpSocket {
      * @param requestData the request from the client.
      * @throws bException If an error occurs while getting IO.
      */
-    public initializeHttpSocket(requestDto requestData) throws bException  {
+    public initializeHttpSocket(requestDto requestData, String clientAddr) throws bException  {
 
         String socketHost = requestData.getURL().getHost();
         int socketPort = requestData.getURL().getPort() != null ?
                          Integer.parseInt(requestData.getURL().getPort()) :
                          requestData.getURL().getProtocol() == "http" ? 80 : 443;
         
-        Log.i("Establishing connection to " + socketHost + ":" + socketPort);
+        Log.i("Client " + clientAddr + " -> " + requestData.getMethod().getLabel().toUpperCase()
+            + " " + socketHost + ":" + socketPort);
 
         try {
             socket = new Socket(socketHost, socketPort);

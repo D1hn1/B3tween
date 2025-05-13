@@ -15,8 +15,8 @@ public class App
     {
         try {
             globalRuntime.threadPool.submit(() -> 
-                new apiListener(8000));
-            new Listener(8080);
+                new apiListener(globalRuntime.API_PORT));
+            new Listener(globalRuntime.PROXY_PORT);
         } catch (IOException ioe) {}
     }
 }

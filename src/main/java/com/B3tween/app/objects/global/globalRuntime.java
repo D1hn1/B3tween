@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import com.B3tween.app.modules.auth.dto.authDto;
 import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Setter
 public class globalRuntime {
@@ -28,6 +30,10 @@ public class globalRuntime {
     // authDto list
     public static int authId;
     public static List<authDto> authList = new ArrayList<>();
+
+    // Constants
+    public static int PROXY_PORT = 8080;
+    public static int API_PORT = 8000;
 
     // Thread pool
     public static ExecutorService threadPool = Executors.newCachedThreadPool();
