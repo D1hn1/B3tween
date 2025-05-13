@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Setter;
 import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Setter
 public class globalRuntime {
@@ -22,5 +24,8 @@ public class globalRuntime {
 
     // Constants
     public static int PROXY_PORT = 8080;
+
+    // Thread pool
+    public static ExecutorService threadPool = Executors.newCachedThreadPool();
 
 }

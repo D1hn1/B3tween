@@ -3,10 +3,10 @@ package com.B3tween.app.modules.handler.handleConnection;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.socket.initializeHttpSocket;
 import com.B3tween.app.objects.dto.requestDto;
+import com.B3tween.app.objects.global.globalRuntime;
 
 import java.io.*;
 import java.net.*;
-import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
 import com.B3tween.app.modules.handler.utils.handlerUtils;
@@ -14,7 +14,7 @@ import com.B3tween.app.modules.handler.utils.handlerUtils;
 public class httpsProxyHandler {
     
     private static void relayBytes(InputStream in, OutputStream out, Socket clientSocket) {
-        new Thread(() -> {
+        globalRuntime.threadPool.submit(() -> {
             try {
                 while (!clientSocket.isClosed()) {
                     int bytesRead = 0;
@@ -23,9 +23,11 @@ public class httpsProxyHandler {
                         out.write(buffer, 0, bytesRead);
                     }
                     out.flush();
+                    if (bytesRead == -1) break;
                 }
+                clientSocket.close();
             } catch (IOException io) {}
-        }).start();
+        });
     }
 
     public static void dispatchRequest(connectionDto connectionData) {
@@ -36,7 +38,6 @@ public class httpsProxyHandler {
                 new initializeHttpSocket(connectionData.getRequest(),
                 ""+connectionData.getClientSocket().getRemoteSocketAddress());
 
-            BufferedWriter serverOut = forwardSocket.out;
             InputStream serverIn = forwardSocket.socket.getInputStream();
             OutputStream serverOutBytes = forwardSocket.socket.getOutputStream();
             InputStream clientIn = connectionData.getClientSocket().getInputStream();
@@ -45,23 +46,10 @@ public class httpsProxyHandler {
             // Client socket timeout
             connectionData.getClientSocket().setSoTimeout(1000);
 
-            // while (!connectionData.getClientSocket().isClosed()) { // MAKES CPU SPIKE UP
-
             requestDto request = connectionData.getRequest();
             if (request.equals(null)) {
                 return;
             }
-
-            // Delete Proxy-Authorization & Proxy-Connection from request
-            request.getHeaders().removeIf(header -> header.getKey().toLowerCase().equals("proxy-authorization"));
-            request.getHeaders().removeIf(header -> header.getKey().toLowerCase().equals("proxy-connection"));
-            if (connectionData.isKeepAlive()) {
-                request.getHeaders().add(headerDto.header("Connection", "Keep-Alive"));
-            }
-
-            // Send request
-            //serverOutBytes.write(request.toString().getBytes());
-            //serverOutBytes.flush();
 
             // Send connection response
             handlerUtils.responses.connectionEstablished(connectionData.getClientSocket());
@@ -71,10 +59,6 @@ public class httpsProxyHandler {
             relayBytes(serverIn, clientOutBytes, connectionData.getClientSocket());
 
             if (!connectionData.isKeepAlive()) return;
-
-            //}
-
-            connectionData.getClientSocket().close();
 
         } catch (IOException io)
         {} catch (bException e) {

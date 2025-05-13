@@ -2,7 +2,6 @@ package com.B3tween.app.modules.handler.listener;
 
 import java.io.*;
 import java.net.*;
-import java.util.concurrent.*;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.global.globalRuntime;
@@ -20,7 +19,7 @@ public class Listener {
 
         // Initialize server socket
         ServerSocket serverSocket = new ServerSocket(port);
-        Log.i("Server listening on port " + port);
+        Log.i("[PROXY] listener started on port " + port);
 
         // Shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -37,13 +36,11 @@ public class Listener {
             Log.i("Ctrl-c pressed exiting");
         }));
 
-        // Thread pool
-        ExecutorService pool = Executors.newCachedThreadPool();
         while (globalRuntime.RUNNING) {
 
             // Accept clients
             Socket clientSocket = serverSocket.accept();
-            pool.submit(() -> handler.Handler(clientSocket));
+            globalRuntime.threadPool.submit(() -> handler.Handler(clientSocket));
 
         }
     }
