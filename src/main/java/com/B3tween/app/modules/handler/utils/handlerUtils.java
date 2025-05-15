@@ -27,18 +27,35 @@ public class handlerUtils {
 
         try {
 
+            // Booleans
+            boolean isContentLength = false;
+
             // Get input stream from client
             BufferedReader clientIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             // Get request
             String line = "";
-            StringBuilder response = new StringBuilder();
-            while (!(line = clientIn.readLine()).isEmpty()) {
-                response.append(line).append("\r\n");
+            int contentLength = 0;
+            StringBuilder request = new StringBuilder();
+            while ((line = clientIn.readLine()) != null && !line.isEmpty()) {
+                if (line.toLowerCase().startsWith("content-length")) {
+                    isContentLength = true;
+                    contentLength = Integer.parseInt(line.split(":")[1].trim());
+                }
+                request.append(line).append("\r\n");
+            }
+
+            if (isContentLength) {
+                // Get body response
+                char[] rawBody = new char[contentLength];
+                clientIn.read(rawBody);
+
+                // Append it to the response
+                request.append(new String(rawBody));
             }
 
             // Parse and return request
-            return requestDto.parseRequest(response.toString());
+            return requestDto.parseRequest(request.toString());
 
         } catch (IOException io) {
             Log.e("Error while getting user input" + io);
