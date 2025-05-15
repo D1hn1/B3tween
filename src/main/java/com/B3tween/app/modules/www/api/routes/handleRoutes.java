@@ -3,6 +3,7 @@ package com.B3tween.app.modules.www.api.routes;
 import java.io.*;
 import java.net.*;
 import java.util.List;
+import org.json.*;
 
 import com.B3tween.app.modules.handler.utils.handlerUtils;
 import com.B3tween.app.modules.log.Log;
@@ -10,6 +11,7 @@ import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.dto.responseDto;
+import com.B3tween.app.objects.enums.Method;
 
 public class handleRoutes {
     
@@ -19,15 +21,56 @@ public class handleRoutes {
                 new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
             // Get request from client
             requestDto request = handlerUtils.getRequest(clientSocket);
-            Log.i("[API] User requested " + request.getURL().getPath());
+            Log.i("[API] " + request.getMethod().getLabel().toUpperCase() + " " 
+                + request.getURL().getPath());
 
             // Parse routes
             switch (request.getURL().getPath()) {
+
+                /**
+                 *  / Path: functions like a Health check
+                 */
                 case "/":
-                    writer.write("HTTP/1.1 200 OK\r\n\r\n");
-                    writer.flush();
+                    apiUtils.responses.twoHundredOk(clientSocket);
                     break;
-            
+                
+                /**
+                 *  /auth/register
+                 */
+                case "/auth/register":
+
+                    if (request.getMethod().equals(Method.POST)) {
+                        // Parse JSON
+                        JSONObject json = new JSONObject(request.getData());
+                        Log.i(json.getString("username"));
+                        Log.i(json.getString("password"));
+                        apiUtils.responses.twoHundredOk(clientSocket);
+
+                        // GET request.data
+                        // Parse the JSON
+                        // Validate the username/password
+                        // See if exists -> If exists redirect to login
+                        //               |_ If not exists save them with the authdto into the list
+                        //                  assigning a JWT and a ID with the apiutils. -> Then redirect to login.
+                    } else {
+                        apiUtils.responses.methodNotAllowed(clientSocket);
+                    }
+
+                    break;
+ 
+                /**
+                 *  /auth/login
+                 */
+                case "/auth/login":
+                    apiUtils.responses.twoHundredOk(clientSocket);
+
+                    // GET request.data
+                    // Parse the JSON
+                    // Validate the username/password.
+                    // See if exists -> If not exists = error message.
+                    //               \_ If exists: set the cookie the JWT and send it to another page. 
+                    break;
+
                 default:
                     apiUtils.responses.resourceNotFound(clientSocket);
                     break;

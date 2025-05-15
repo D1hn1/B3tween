@@ -12,6 +12,22 @@ public class apiUtils {
     public static class responses {
 
         /**
+         * Sends a 200 Ok.
+         * @param clientSocket The client socket.
+         */
+        public static void twoHundredOk(Socket clientSocket) {
+            try {
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 200, 
+                    "Ok", 
+                    List.of(headerDto.header("Connection", "close")), 
+                    null);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
          * Sends a 404 when a resource is not found.
          * @param clientSocket The client socket
          */
@@ -23,6 +39,23 @@ public class apiUtils {
                             "Not Found",
                             List.of(headerDto.header("Content-Length", ""+data.length())),
                             data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
+         * Sends a 405 when the method is not allowed.
+         * @param clientSocket The client socket.
+         */
+        public static void methodNotAllowed(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesnt support this method\", \"status\":405}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 405,
+                    "Method Not Allowed", 
+                    List.of(headerDto.header("Content-Length", ""+data.length())), 
+                    data);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}

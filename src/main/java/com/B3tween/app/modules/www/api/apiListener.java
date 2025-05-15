@@ -12,7 +12,7 @@ public class apiListener {
     public apiListener(int port) throws IOException {
         // Initialize socket
         ServerSocket socket = new ServerSocket(port);
-        Log.i("Api listening on port " + port);
+        Log.i("[API] listener started on port " + port);
 
         while (globalRuntime.RUNNING) {
             // Accept clients
