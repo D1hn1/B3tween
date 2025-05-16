@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import lombok.Setter;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
 
 @Setter
 public class globalRuntime {

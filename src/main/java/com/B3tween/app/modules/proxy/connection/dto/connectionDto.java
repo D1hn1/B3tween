@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.handler.handleConnection.dto;
+package com.B3tween.app.modules.proxy.connection.dto;
 
 import java.io.*;
 import lombok.Builder;

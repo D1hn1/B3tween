@@ -1,21 +1,21 @@
-package com.B3tween.app.modules.handler.listener;
+package com.B3tween.app.modules.proxy;
 
 import java.io.*;
 import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
+import com.B3tween.app.modules.proxy.connection.proxyConnectionHandler;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.global.globalRuntime;
-import com.B3tween.app.modules.handler.handleConnection.handler;
-import com.B3tween.app.modules.handler.utils.handlerUtils;
 
-public class Listener {
+public class proxyListener {
     
     /**
      * Listener class
      * @param port Port to listen on
      * @throws IOException If an error occurs while closing the socket
      */
-    public Listener(int port) throws IOException {
+    public proxyListener(int port) throws IOException {
 
         // Initialize server socket
         ServerSocket serverSocket = new ServerSocket(port);
@@ -31,7 +31,7 @@ public class Listener {
             };
 
             // Close all client connections & stop server
-            handlerUtils.closeAllConnections();
+            proxyUtils.closeAllConnections();
             globalRuntime.RUNNING = false;
             Log.i("Ctrl-c pressed exiting");
         }));
@@ -40,7 +40,7 @@ public class Listener {
 
             // Accept clients
             Socket clientSocket = serverSocket.accept();
-            globalRuntime.threadPool.submit(() -> handler.Handler(clientSocket));
+            globalRuntime.threadPool.submit(() -> proxyConnectionHandler.Handler(clientSocket));
 
         }
     }

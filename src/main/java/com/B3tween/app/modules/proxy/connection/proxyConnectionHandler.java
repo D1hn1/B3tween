@@ -1,27 +1,27 @@
-package com.B3tween.app.modules.handler.handleConnection;
+package com.B3tween.app.modules.proxy.connection;
 
 import java.io.*;
 import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.authProxyImpl;
 import com.B3tween.app.objects.global.globalRuntime;
-import com.B3tween.app.modules.handler.utils.handlerUtils;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
 
-public class handler {
+public class proxyConnectionHandler {
  
     public static void Handler(Socket clientSocket) {
 
         // Get client request
-        requestDto request = handlerUtils.getRequest(clientSocket);
+        requestDto request = proxyUtils.getRequest(clientSocket);
 
         // Validate proxy authentication
         if (globalRuntime.PROXY_AUTHENTICATION) {
             if (!authProxyImpl.validateLogin(request)) {
-                handlerUtils.responses.proxyAuthenticationRequired(clientSocket);
+                proxyUtils.responses.proxyAuthenticationRequired(clientSocket);
                 Log.e("Client: " + clientSocket.getRemoteSocketAddress() + " failed authentication");
                 return;
             }
@@ -48,7 +48,7 @@ public class handler {
 
         // Connection DTO
         connectionDto connectionData = connectionDto.builder()
-            .id(handlerUtils.getNextId())
+            .id(proxyUtils.getNextId())
             .request(request)
             .clientSocket(clientSocket)
             .clientIn(clientIn)

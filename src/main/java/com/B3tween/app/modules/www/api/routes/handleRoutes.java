@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.List;
 import org.json.*;
 
-import com.B3tween.app.modules.handler.utils.handlerUtils;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.objects.dto.headerDto;
@@ -20,7 +20,7 @@ public class handleRoutes {
         try (BufferedWriter writer = 
                 new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
             // Get request from client
-            requestDto request = handlerUtils.getRequest(clientSocket);
+            requestDto request = proxyUtils.getRequest(clientSocket);
             Log.i("[API] " + request.getMethod().getLabel().toUpperCase() + " " 
                 + request.getURL().getPath());
 
