@@ -6,8 +6,17 @@ import java.util.List;
 
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.responseDto;
+import com.B3tween.app.objects.global.globalRuntime;
 
 public class apiUtils {
+
+    /**
+     * Generates the next ID for the User.
+     * @return The next ID.
+     */
+    public static int getNextUserId() {
+        return globalRuntime.authId++;
+    }
 
     public static class responses {
 
@@ -21,6 +30,22 @@ public class apiUtils {
                 responseDto response = responseDto.response("HTTP/1.1", 200, 
                     "Ok", 
                     List.of(headerDto.header("Connection", "close")), 
+                    null);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
+         * Sends a 302 when a user registers correctly
+         * @param clientSocket The client socket.
+         */
+        public static void foundRedirect(Socket clientSocket, String redirect) {
+            try {
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 302, 
+                    "Found", 
+                    List.of(headerDto.header("Location", redirect)), 
                     null);
                 clientOut.write(response.toString());
                 clientOut.flush();
@@ -65,7 +90,7 @@ public class apiUtils {
          * Sends a 409 when a conflict occurs in registration
          * @param clientSocket The client socket
          */
-        public static void userAlreadyExists(Socket clientSocket) {
+        public static void registerConflict(Socket clientSocket) {
             try {
                 String data = "{\"error\":\"An error ocurred while registering\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -78,6 +103,22 @@ public class apiUtils {
             } catch (IOException io) {}
         }
 
+        /**
+         * Sends a 409 when a user is already created
+         * @param clientSocket The client socket
+         */
+        public static void registerConflictUsername(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"User already exists\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 409,
+                    "Conflict",
+                    List.of(headerDto.header("Content-Length", ""+data.length())),
+                    data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
     }
     
 }

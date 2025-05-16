@@ -1,6 +1,6 @@
 package com.B3tween.app.modules.auth.repository;
 
-import com.B3tween.app.modules.auth.dto.authDto;
+import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class authRepository {
@@ -12,12 +12,15 @@ public class authRepository {
      * @return True if the user can register
      */
     public static boolean canUserRegister(String username, String password) {
-        return !globalRuntime.authList.stream().anyMatch(auth -> auth.username.equals(username)) &&
-                !globalRuntime.authList.stream().anyMatch(auth -> auth.password.equals(password));
+        return !globalRuntime.authList.stream().anyMatch(auth -> auth.getUsername().equals(username));
     }
 
-//    public static authDto save(String username, String password) {
-//
-//    }
+    /**
+     * Saves the AuthDTO in to the list.
+     * @param dto The user to save.
+     */
+    public static void save(AuthDto dto) {
+        globalRuntime.authList.add(dto);
+    }
 
 }
