@@ -5,14 +5,14 @@ import java.net.*;
 import java.util.List;
 import org.json.*;
 
-import com.B3tween.app.modules.auth.repository.authRepository;
-import com.B3tween.app.modules.handler.utils.handlerUtils;
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.www.api.utils.apiUtils;
+import com.B3tween.app.objects.enums.Method;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.dto.responseDto;
-import com.B3tween.app.objects.enums.Method;
+import com.B3tween.app.modules.www.api.utils.apiUtils;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
+import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class handleRoutes {
     
@@ -22,7 +22,7 @@ public class handleRoutes {
                 new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
 
             // Get request from client
-            requestDto request = handlerUtils.getRequest(clientSocket);
+            requestDto request = proxyUtils.getRequest(clientSocket);
             Log.i("[API] " + request.getMethod().getLabel().toUpperCase() + " " 
                 + request.getURL().getPath());
 

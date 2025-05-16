@@ -7,8 +7,8 @@ import java.util.concurrent.Executors;
 
 import lombok.Setter;
 
-import com.B3tween.app.modules.auth.dto.authDto;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
+import com.B3tween.app.modules.auth.dto.AuthDto;
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
 
 @Setter
 public class globalRuntime {
@@ -27,7 +27,7 @@ public class globalRuntime {
 
     // authDto list
     public static int authId;
-    public static List<authDto> authList = new ArrayList<>();
+    public static List<AuthDto> authList = new ArrayList<>();
 
     // Constants
     public static int PROXY_PORT = 8080;

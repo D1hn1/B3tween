@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.handler.utils;
+package com.B3tween.app.modules.proxy.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,7 +15,7 @@ import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.dto.responseDto;
 import com.B3tween.app.objects.global.globalRuntime;
 
-public class handlerUtils {
+public class proxyUtils {
 
     /**
      * Generate next id for the Connection DTO.
