@@ -8,11 +8,15 @@ import lombok.Builder;
 @Getter
 @Setter
 @Builder
-public class authDto {
+public class AuthDto {
     
-    public int id;
-    public String username;
-    public String password;
-    public String bearerToken;
+    private int id;
+
+    private Long createdAt;
+    private Long updatedAt;
+
+    private String username;
+    private String password;
+    private String bearerToken;
 
 }
