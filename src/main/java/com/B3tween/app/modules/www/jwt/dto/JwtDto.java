@@ -14,9 +14,9 @@ import com.B3tween.app.objects.global.globalRuntime;
 @Builder
 public class JwtDto {
 
-    public String header;
-    public String payload;
-    public String token;
+    private String header;
+    private String payload;
+    private String token;
 
     public void generateToken() {
         if (token == null) {

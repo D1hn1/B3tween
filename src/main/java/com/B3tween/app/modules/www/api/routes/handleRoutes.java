@@ -77,7 +77,7 @@ public class handleRoutes {
                                     .createdAt(Instant.now().toEpochMilli())
                                     .username(username)
                                     .password(password)
-                                    .bearerToken(jwt.token)
+                                    .bearerToken(jwt.getToken())
                                     .build();
 
                                 // Save user
