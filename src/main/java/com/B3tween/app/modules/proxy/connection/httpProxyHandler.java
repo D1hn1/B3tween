@@ -1,17 +1,17 @@
-package com.B3tween.app.modules.handler.handleConnection;
+package com.B3tween.app.modules.proxy.connection;
 
 import java.io.*;
 import java.net.*;
 import java.io.IOException;
 
 import com.B3tween.app.modules.log.Log;
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.global.globalRuntime;
 import com.B3tween.app.modules.exception.bException;
-import com.B3tween.app.modules.handler.utils.handlerUtils;
 import com.B3tween.app.modules.socket.initializeHttpSocket;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
 
 public class httpProxyHandler {
     
@@ -71,7 +71,7 @@ public class httpProxyHandler {
 
         } catch (IOException io)
         {} catch (bException e) {
-            handlerUtils.responses.proxyBadGateway(
+            proxyUtils.responses.proxyBadGateway(
                     connectionData.getClientSocket());
             Log.e("Error: " + e);
         }
