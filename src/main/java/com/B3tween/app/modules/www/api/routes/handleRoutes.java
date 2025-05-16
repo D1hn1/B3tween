@@ -40,7 +40,7 @@ public class handleRoutes {
                 /**
                  *  /auth/register
                  *  ~=== POST DATA ===~
-                 * +-------------------+
+                 * +----------+--------+
                  * |   Field  |  Type  |
                  * +-------------------+
                  * | username | String |
@@ -115,6 +115,14 @@ public class handleRoutes {
                     // Validate the username/password.
                     // See if exists -> If not exists = error message.
                     //               \_ If exists: set the cookie the JWT and send it to another page. 
+                    break;
+                
+                /**
+                 *  /logout
+                 */
+                case "/logout":
+                    apiUtils.responses.twoHundredOk(clientSocket);
+                    // Send user a lapsed(caducado) cookie.
                     break;
 
                 default:

@@ -3,7 +3,6 @@
 </p>
 
 # B3tween
----
 B3tween is a proxy capable of handeling http & https connections.
 
 ## Tech Stack
@@ -15,4 +14,8 @@ B3tween is a proxy capable of handeling http & https connections.
 - API module
 
 ### TODO NEXT:
-- 
+- MERGE: develop <- feature/dashboard
+- Login endpoint
+- Logout endpoint
+- Web module (frontend)
+- Unify proxy
