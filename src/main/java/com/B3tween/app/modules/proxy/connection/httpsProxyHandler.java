@@ -1,6 +1,8 @@
-package com.B3tween.app.modules.handler.handleConnection;
+package com.B3tween.app.modules.proxy.connection;
 
 import com.B3tween.app.modules.log.Log;
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.modules.socket.initializeHttpSocket;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.global.globalRuntime;
@@ -8,8 +10,6 @@ import com.B3tween.app.objects.global.globalRuntime;
 import java.io.*;
 import java.net.*;
 import com.B3tween.app.modules.exception.bException;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
-import com.B3tween.app.modules.handler.utils.handlerUtils;
 
 public class httpsProxyHandler {
     
@@ -52,7 +52,7 @@ public class httpsProxyHandler {
             }
 
             // Send connection response
-            handlerUtils.responses.connectionEstablished(connectionData.getClientSocket());
+            proxyUtils.responses.connectionEstablished(connectionData.getClientSocket());
 
             // Transmit data
             relayBytes(clientIn, serverOutBytes, connectionData.getClientSocket());

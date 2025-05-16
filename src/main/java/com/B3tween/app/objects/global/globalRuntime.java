@@ -3,9 +3,11 @@ package com.B3tween.app.objects.global;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Setter;
-import com.B3tween.app.modules.handler.handleConnection.dto.connectionDto;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
 
 @Setter
 public class globalRuntime {
