@@ -6,7 +6,6 @@ import lombok.Builder;
 import java.util.List;
 
 import com.B3tween.app.modules.exception.bException;
-import com.B3tween.app.objects.enums.Exceptions;
 
 @Getter
 @Setter
@@ -52,7 +51,8 @@ public class uriDto {
                         URL.startsWith("http") ? "http" : null;
 
         if (dto.protocol == null)
-            throw new bException(Exceptions.MALFORMED_URL, "");
+            return dto;
+
 
         // dto.host
         int offset = (dto.protocol.length() + 3);

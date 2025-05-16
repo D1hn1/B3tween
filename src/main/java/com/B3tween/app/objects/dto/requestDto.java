@@ -116,8 +116,12 @@ public class requestDto {
             default:
                 for (int x = offset; request.charAt(x) != ' '; x++) {
                     if (request.charAt(x + 1) == ' ') {
-                        returnUrlHttp = uriDto.parseUrl(request.substring(offset, x));
-                        offset = (offset + request.substring(offset,(x + 1)).length() + 1);
+                        String urlOrPath = request.substring(offset, (x+1));
+                        returnUrlHttp = uriDto.parseUrl(urlOrPath);
+                        if (returnUrlHttp.getProtocol() == null) {
+                            returnUrlHttp = uriDto.url(returnProtocol, null, null, urlOrPath);
+                        }
+                        offset = (offset + urlOrPath.length() + 1);
                     }
                 }
                 break;

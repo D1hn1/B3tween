@@ -4,7 +4,7 @@
   <groupId>com.B3tween.app</groupId>
   <artifactId>B3tween</artifactId>
   <packaging>jar</packaging>
-  <version>v5.0</version>
+  <version>5.1</version>
   <name>B3tween</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -19,6 +19,16 @@
       <artifactId>lombok</artifactId>
       <version>1.18.30</version> <!-- Use the latest version -->
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.16.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20210307</version>
     </dependency>
   </dependencies>
   <build>
