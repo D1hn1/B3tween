@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.List;
 import org.json.*;
 
+import com.B3tween.app.modules.auth.repository.authRepository;
 import com.B3tween.app.modules.handler.utils.handlerUtils;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
@@ -19,6 +20,7 @@ public class handleRoutes {
 
         try (BufferedWriter writer = 
                 new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
+
             // Get request from client
             requestDto request = handlerUtils.getRequest(clientSocket);
             Log.i("[API] " + request.getMethod().getLabel().toUpperCase() + " " 
@@ -35,17 +37,33 @@ public class handleRoutes {
                     break;
                 
                 /**
-                 *  /auth/register
+                 * /auth/register
+                 * ~= POST data =~
+                 * \_ username: String
+                 * \_ password: String   
                  */
                 case "/auth/register":
 
                     if (request.getMethod().equals(Method.POST)) {
+
                         // Parse JSON
                         JSONObject json = new JSONObject(request.getData());
-                        Log.i(json.getString("username"));
-                        Log.i(json.getString("password"));
-                        apiUtils.responses.twoHundredOk(clientSocket);
+                        String username = json.getString("username");
+                        String password = json.getString("password");
 
+                        // Check for null values
+                        if (username.isEmpty() || password.isEmpty())
+                            apiUtils.responses.userAlreadyExists(clientSocket);
+
+                        else {
+                            // Check if user exists
+                            if (authRepository.canUserRegister(username, password)) {
+                                // USER SANITAZIED
+                                // GET THE JWT OF THE USER -> CRAFT IT HERE
+                                // CREATE A FUNCTION TO SAVE THE AUTHDTO ENTITY IN THE REPOSITORY CODE OF THE AUTH
+                            }
+
+                        }
                         // GET request.data
                         // Parse the JSON
                         // Validate the username/password

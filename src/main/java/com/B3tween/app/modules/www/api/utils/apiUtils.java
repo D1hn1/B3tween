@@ -61,6 +61,23 @@ public class apiUtils {
             } catch (IOException io) {}
         }
 
+        /**
+         * Sends a 409 when a conflict occurs in registration
+         * @param clientSocket The client socket
+         */
+        public static void userAlreadyExists(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"An error ocurred while registering\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 409,
+                    "Conflict",
+                    List.of(headerDto.header("Content-Length", ""+data.length())),
+                    data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
     }
     
 }
