@@ -17,7 +17,7 @@ B3tween is a proxy capable of handeling http & https connections.
 - Login endpoint ( SEE IT )
 - Logout endpoint
 - Web module (frontend)
-- Unify proxy
+- Rewrite HTTPS proxy (Rewrite file names?) 
 - Split up the routes into different files:
      - Login
      - Register
