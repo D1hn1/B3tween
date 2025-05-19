@@ -34,14 +34,13 @@ public class httpProxyHandler {
             OutputStream clientOutBytes = connectionData.getClientSocket().getOutputStream();
 
             // Client socket timeout
-            connectionData.getClientSocket().setSoTimeout(1000);
+            connectionData.getClientSocket().setSoTimeout(5000);
 
             while (!connectionData.getClientSocket().isClosed()) {
                 // Get client request
                 requestDto request = connectionData.getRequest();
-                if (request.equals(null)) {
+                if (request == null)
                     break;
-                }
 
                 // Delete Proxy-Authorization & Proxy-Connection from request
                 request.getHeaders().removeIf(header -> header.getKey().toLowerCase().equals("proxy-authorization"));
