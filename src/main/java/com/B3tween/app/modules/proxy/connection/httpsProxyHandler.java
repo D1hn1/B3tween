@@ -43,7 +43,7 @@ public class httpsProxyHandler {
             OutputStream clientOutBytes = connectionData.getClientSocket().getOutputStream();
 
             // Client socket timeout
-            connectionData.getClientSocket().setSoTimeout(1000);
+            connectionData.getClientSocket().setSoTimeout(5000);
 
             requestDto request = connectionData.getRequest();
             if (request.equals(null)) {
