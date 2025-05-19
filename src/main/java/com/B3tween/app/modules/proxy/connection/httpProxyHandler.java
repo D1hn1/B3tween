@@ -15,12 +15,22 @@ import com.B3tween.app.modules.socket.initializeHttpSocket;
 
 public class httpProxyHandler {
     
+    /**
+     * Closes all the connection sockets.
+     * @param connectionData The connection DTO.
+     * @param serverSocket The forward socket.
+     * @throws IOException If an error occurs while closing the socket.
+     */
     private static void closeSockets(connectionDto connectionData, Socket serverSocket) throws IOException {
+        globalRuntime.connectionList.remove(connectionData);
         connectionData.getClientSocket().close();
         serverSocket.close();
-        globalRuntime.connectionList.remove(connectionData);
     }
 
+    /**
+     * Handles the HTTP connections.
+     * @param connectionData The connection DTO.
+     */
     public static void dispatchRequest(connectionDto connectionData) {
 
         try {
@@ -30,8 +40,8 @@ public class httpProxyHandler {
                 ""+connectionData.getClientSocket().getRemoteSocketAddress());
 
             BufferedWriter serverOut = forwardSocket.out;
-            InputStream serverIn = forwardSocket.socket.getInputStream();
-            OutputStream clientOutBytes = connectionData.getClientSocket().getOutputStream();
+            BufferedReader serverIn = forwardSocket.in;
+            BufferedWriter clientOut = connectionData.getClientOut();
 
             // Client socket timeout
             connectionData.getClientSocket().setSoTimeout(5000);
@@ -54,14 +64,40 @@ public class httpProxyHandler {
                 serverOut.flush();
 
                 // Recv data 
-                int bytesRead = 0;
-                byte[] buffer = new byte[8192];
-                while ((bytesRead = serverIn.read(buffer)) != -1) {
-                    clientOutBytes.write(buffer, 0, bytesRead);
+                String line = "";
+                int contentLength = 0;
+                boolean isContentLength = false;
+                StringBuilder response = new StringBuilder();
+                while ((line = serverIn.readLine()) != null && !line.isEmpty()) {
+                    // Check for content length
+                    if (line.toLowerCase().startsWith("content-length")) {
+                        isContentLength = true;
+                        contentLength = Integer.parseInt(line.split(":")[1].trim());
+                    }
+                    // Check for Connection close
+                    if (line.toLowerCase().startsWith("connection")) {
+                        if (line.split(":")[1].trim().toLowerCase().startsWith("close")) {
+                            connectionData.setKeepAlive(false);
+                        }
+                    }
+                    // Append to response
+                    response.append(line).append("\r\n");
                 }
-                clientOutBytes.flush();
 
-                if (!connectionData.isKeepAlive()) break;
+                if (isContentLength) {
+                    // Get body response
+                    char[] rawBody = new char[contentLength];
+                    serverIn.read(rawBody);
+                    // Append to response
+                    response.append(new String(rawBody));
+                }
+
+                // Send data
+                clientOut.write(response.toString());
+                clientOut.flush();
+
+                if (!connectionData.isKeepAlive())
+                    break;
 
             }
 
