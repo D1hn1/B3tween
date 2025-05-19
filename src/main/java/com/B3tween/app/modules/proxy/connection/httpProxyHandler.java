@@ -39,9 +39,8 @@ public class httpProxyHandler {
             while (!connectionData.getClientSocket().isClosed()) {
                 // Get client request
                 requestDto request = connectionData.getRequest();
-                if (request.equals(null)) {
+                if (request == null)
                     break;
-                }
 
                 // Delete Proxy-Authorization & Proxy-Connection from request
                 request.getHeaders().removeIf(header -> header.getKey().toLowerCase().equals("proxy-authorization"));

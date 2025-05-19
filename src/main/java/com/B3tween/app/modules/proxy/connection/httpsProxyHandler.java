@@ -23,7 +23,6 @@ public class httpsProxyHandler {
                         out.write(buffer, 0, bytesRead);
                     }
                     out.flush();
-                    if (bytesRead == -1) break;
                 }
                 clientSocket.close();
             } catch (IOException io) {}
@@ -57,8 +56,6 @@ public class httpsProxyHandler {
             // Transmit data
             relayBytes(clientIn, serverOutBytes, connectionData.getClientSocket());
             relayBytes(serverIn, clientOutBytes, connectionData.getClientSocket());
-
-            if (!connectionData.isKeepAlive()) return;
 
         } catch (IOException io)
         {} catch (bException e) {
