@@ -18,6 +18,25 @@ public class apiUtils {
         return globalRuntime.authId++;
     }
 
+    /**
+     * Sends a 302 Found when a user logs in correctly.
+     * And sets a cookie after the login.
+     * @param clientSocket The client socket
+     * @param cookie The cookie to set
+     */
+    public static void loginCorrectSetCookie(Socket clientSocket, String cookie, String location) {
+        try {
+            BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            responseDto response = responseDto.response("HTTP/1.1", 302,
+                "Found",
+                List.of(headerDto.header("Location", location),
+                        headerDto.header("Set-Cookie", cookie)),
+                null);
+            clientOut.write(response.toString());
+            clientOut.flush();
+        } catch (IOException io) {}
+    }
+
     public static class responses {
 
         /**
@@ -110,6 +129,23 @@ public class apiUtils {
         public static void registerConflictUsername(Socket clientSocket) {
             try {
                 String data = "{\"error\":\"User already exists\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.response("HTTP/1.1", 409,
+                    "Conflict",
+                    List.of(headerDto.header("Content-Length", ""+data.length())),
+                    data);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
+         * Sends a 409 when a conflict occurs in login
+         * @param clientSocket The client socket
+         */
+        public static void loginConflict(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"An error ocurred while logging in\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 responseDto response = responseDto.response("HTTP/1.1", 409,
                     "Conflict",

@@ -38,14 +38,11 @@ public class handleRoutes {
                     break;
                 
                 /**
-                 *  /auth/register
-                 *  ~=== POST DATA ===~
-                 * +----------+--------+
-                 * |   Field  |  Type  |
-                 * +-------------------+
-                 * | username | String |
-                 * | password | String |
-                 * +----------+--------+
+                 *  POST /auth/register
+                 * 
+                 *  Expected JSON body:
+                 *  - username: String
+                 *  - password: String
                  */
                 case "/auth/register":
 
@@ -57,45 +54,34 @@ public class handleRoutes {
                         String password = json.getString("password").trim();
 
                         // Check for null values
-                        if (username.isEmpty() || password.isEmpty())
+                        if (username.isEmpty() || password.isEmpty()) {
                             apiUtils.responses.registerConflict(clientSocket);
-
-                        else {
-                            // Check if user exists
-                            if (authRepository.canUserRegister(username, password)) {
-
-                                // JWT Token
-                                JwtDto jwt = JwtDto.builder()
-                                    .header("{ \"alg\": \"HS256\", \"typ\": \"JWT\" }")
-                                    .payload("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}")
-                                    .build();
-                                jwt.generateToken();
-
-                                // Auth DTO
-                                AuthDto user = AuthDto.builder()
-                                    .id(apiUtils.getNextUserId())
-                                    .createdAt(Instant.now().toEpochMilli())
-                                    .username(username)
-                                    .password(password)
-                                    .bearerToken(jwt.getToken())
-                                    .build();
-
-                                // Save user
-                                Log.l("[API] User registered id=" + user.getId() + " username=" + user.getUsername());
-                                authRepository.save(user);
-
-                                // Response
-                                // TODO: Redirect user to the login page
-                                //apiUtils.responses.foundRedirect(clientSocket, "localhost:"+globalRuntime.WEB_PORT);
-                                apiUtils.responses.twoHundredOk(clientSocket);
-
-                            } else {
-                                // User already exists
-                                apiUtils.responses.registerConflictUsername(clientSocket);
-
-                            }
-
+                            break;
                         }
+
+                        // Check if user exists
+                        if (!authRepository.canUserRegister(username)) {
+                            apiUtils.responses.registerConflictUsername(clientSocket);
+                            break;
+                        }
+
+                        // Auth DTO
+                        AuthDto user = AuthDto.builder()
+                            .id(apiUtils.getNextUserId())
+                            .createdAt(Instant.now().toEpochMilli())
+                            .updatedAt(Instant.now().toEpochMilli())
+                            .username(username)
+                            .password(password)
+                            .build();
+
+                        // Save user
+                        Log.l("[API] User registered id=" + user.getId() + " username=" + user.getUsername());
+                        authRepository.save(user);
+
+                        // Response
+                        // TODO: Redirect user to the login page
+                        //apiUtils.responses.foundRedirect(clientSocket, "localhost:"+globalRuntime.WEB_PORT);
+                        apiUtils.responses.twoHundredOk(clientSocket);
 
                     } else {
                         // Method not valid
@@ -105,16 +91,54 @@ public class handleRoutes {
                     break;
  
                 /**
-                 *  /auth/login
+                 *  POST /auth/login
+                 * 
+                 *  Expected JSON body
+                 *  - usename: String
+                 *  - password: String
                  */
                 case "/auth/login":
-                    apiUtils.responses.twoHundredOk(clientSocket);
+                    
+                    // Parse method
+                    if (request.getMethod().equals(Method.POST)) {
 
-                    // GET request.data
-                    // Parse the JSON
-                    // Validate the username/password.
-                    // See if exists -> If not exists = error message.
-                    //               \_ If exists: set the cookie the JWT and send it to another page. 
+                        JSONObject json = new JSONObject(request.getData());
+                        String username = json.getString("username").trim();
+                        String password = json.getString("password").trim();
+
+                        if (username.isEmpty() || password.isEmpty()) {
+                            apiUtils.responses.loginConflict(clientSocket);
+                            break;
+                        }
+
+                        if (!authRepository.canUserLogin(username, password)) {
+                            apiUtils.responses.loginConflict(clientSocket);
+                            break;
+                        }
+
+                        // Get the user
+                        AuthDto user = authRepository.getUser(username, password);
+
+                        // Create JWT Token
+                        JwtDto jwt = JwtDto.builder()
+                            .header("{ \"alg\": \"HS256\", \"typ\": \"JWT\" }")
+                            .payload("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}")
+                            .build();
+                        jwt.generateToken();
+
+                        // Set JWT to user DTO & update user dto
+                        user.setLoggedIn(true);
+                        user.setUpdatedAt(Instant.now().toEpochMilli());
+
+                        // Send response
+                        Log.l("[API] User logged in id=" + user.getId() + " username=" + user.getUsername());
+                        apiUtils.loginCorrectSetCookie(clientSocket,
+                        "b3cookie=" + jwt.getToken(), "/");
+
+                    } else {
+                        apiUtils.responses.methodNotAllowed(clientSocket);
+                    }
+
                     break;
                 
                 /**
