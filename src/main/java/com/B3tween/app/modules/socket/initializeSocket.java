@@ -2,34 +2,36 @@ package com.B3tween.app.modules.socket;
 
 import java.io.*;
 import java.net.*;
-import java.util.stream.Stream;
 import com.B3tween.app.objects.dto.requestDto;
-
+import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 
-/**
- * Initializes a Socket for better handling.
- * @throws bException If connection fails.
- */
 public class initializeSocket {
 
-    private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    public Socket socket;
+    public BufferedWriter out;
+    public BufferedReader in;
 
-    // constructor
-    public initializeSocket(requestDto requestData) throws bException  {
+    /**
+     * Http socket constructo
+     * @param requestData the request from the client.
+     * @throws bException If an error occurs while getting IO.
+     */
+    public initializeSocket(requestDto requestData, String clientAddr) throws bException  {
 
         String socketHost = requestData.getURL().getHost();
         int socketPort = requestData.getURL().getPort() != null ?
                          Integer.parseInt(requestData.getURL().getPort()) :
                          requestData.getURL().getProtocol() == "http" ? 80 : 443;
+        
+        Log.i("[PROXY] Client " + clientAddr + " -> " + requestData.getMethod().getLabel().toUpperCase()
+            + " " + socketHost + ":" + socketPort);
 
         try {
             socket = new Socket(socketHost, socketPort);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
         } catch (UnknownHostException ex) {
             throw new bException(Exceptions.UNKNOWN_HOST, ex.getMessage());
@@ -39,24 +41,6 @@ public class initializeSocket {
 
         }
 
-    }
-
-    /**
-     * Sends data through the socket.
-     * @param request String.
-     * @return Int
-     */
-    public int send(String request) {
-        out.println(request);
-        return 0;
-    }
-
-    /**
-     * Receives data from the socket
-     * @return Stream<String> (lines)
-     */
-    public Stream<String> recv() {
-        return in.lines();
     }
 
     /**

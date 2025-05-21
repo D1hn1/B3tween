@@ -11,10 +11,6 @@ import com.B3tween.app.objects.enums.Exceptions;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Method;
 
-/**
- * Definition of DTO request.
- * @return String, List<headerDto>, Method.
- */
 @Getter
 @Setter
 @Builder
@@ -57,7 +53,7 @@ public class requestDto {
         headers.forEach(header -> {
             request.append(header.getKey() + ": " + header.getValue() + "\r\n");
         });
-        request.append("\r\n" + (data == null ? "" : data));
+        request.append("\r\n" + (data == null ? "" : data)).append("\r\n");
 
         return request.toString();
     }
@@ -120,8 +116,12 @@ public class requestDto {
             default:
                 for (int x = offset; request.charAt(x) != ' '; x++) {
                     if (request.charAt(x + 1) == ' ') {
-                        returnUrlHttp = uriDto.parseUrl(request.substring(offset, x));
-                        offset = (offset + request.substring(offset,(x + 1)).length() + 1);
+                        String urlOrPath = request.substring(offset, (x+1));
+                        returnUrlHttp = uriDto.parseUrl(urlOrPath);
+                        if (returnUrlHttp.getProtocol() == null) {
+                            returnUrlHttp = uriDto.url(returnProtocol, null, null, urlOrPath);
+                        }
+                        offset = (offset + urlOrPath.length() + 1);
                     }
                 }
                 break;
@@ -153,9 +153,6 @@ public class requestDto {
                 isKey = true;
                 returnHeaders.add(headerDto.header(key, value));
             }
-
-            if (request.charAt(x) == '\r' && request.charAt(x + 2) == '\r')
-                break;
 
         }
 

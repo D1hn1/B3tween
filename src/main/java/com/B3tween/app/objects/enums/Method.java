@@ -3,10 +3,6 @@ package com.B3tween.app.objects.enums;
 import lombok.Getter;
 import com.B3tween.app.modules.exception.bException;
 
-/**
- * Definition of a Method enum.
- * @return String label.
- */
 @Getter
 public enum Method {
     GET("get"),

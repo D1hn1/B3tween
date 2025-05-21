@@ -2,18 +2,13 @@ package com.B3tween.app.modules.log;
 
 import java.time.LocalDateTime;
 
-/**
- * Definition of Log
- * @returns void
- */
 public class Log {
     
     private static String RED     = "\u001B[31m";
     private static String GREEN   = "\u001B[32m";
-    private static String BLUE   = "\u001B[34m";
+    private static String BLUE    = "\u001B[34m";
     private static String SUBLINE = "\u001B[4m";
     private static String END     = "\u001B[0m";
-    private static String TAB     = "\t";
 
     private static LocalDateTime time = LocalDateTime.now();
 
@@ -22,8 +17,10 @@ public class Log {
      * @return void
      */
     public static void e(String message) {
-        System.err.println(RED + time + TAB + "| " +
-                            message + END);
+        System.err.println(time + " " + Thread.activeCount() +
+            RED + " ERROR    " + END + "-- " +
+            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            message);
     }
 
     /**
@@ -31,8 +28,10 @@ public class Log {
      * @return void
      */
     public static void l(String message) {
-        System.out.println(GREEN + time + TAB + "| " +
-                            message + END);
+        System.out.println(time + " " + Thread.activeCount() +
+            GREEN + " LOG      " + END + "-- " +
+            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            message);
     }
 
     /**
@@ -40,8 +39,10 @@ public class Log {
      * @return void
      */
     public static void c(String message) {
-        System.err.println(RED + time + TAB + "| " +
-                            SUBLINE + message + END);
+        System.err.println(time + " " + Thread.activeCount() +
+            RED + " " + SUBLINE + "CRITICAL" + END + " " + "-- " +
+            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            message);
     }
 
     /**
@@ -49,7 +50,9 @@ public class Log {
      * @return void
      */
     public static void i(String message) {
-        System.out.println(BLUE + time + TAB + "| " +
-                            message + END);
+        System.out.println(time + " " + Thread.activeCount() +
+            BLUE + " INFO     " + END + "-- " + 
+            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            message);
     }
 }

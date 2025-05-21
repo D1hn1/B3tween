@@ -2,10 +2,6 @@ package com.B3tween.app.objects.enums;
 
 import lombok.Getter; 
 
-/**
- * Definition of Exceptions for
- * modules/log/bException.java.
- */
 @Getter
 public enum Exceptions {
     METHOD_NOT_IMPLEMENTED("Method not implemented"),
@@ -14,7 +10,8 @@ public enum Exceptions {
     IO_CONN_ERR("IO Socket connection error"),
     SOCKET_CLOSE_ERROR("Socket close error"),
     MALFORMED_URL("Malformed URL"),
-    METHOD_NOT_SUPPORTED("HTTP method not found or not supported");
+    METHOD_NOT_SUPPORTED("HTTP method not found or not supported"),
+    NOT_AUTHORIZE("User not authorize");
     
     private String label;
 
