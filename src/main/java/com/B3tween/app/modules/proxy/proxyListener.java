@@ -27,13 +27,13 @@ public class proxyListener {
                 serverSocket.close();
             }
             catch (IOException io) {
-                Log.e("Error while closing the socket " + io);
+                Log.e("[HOOK] Error while closing the socket " + io);
             };
 
             // Close all client connections & stop server
             proxyUtils.closeAllConnections();
             globalRuntime.RUNNING = false;
-            Log.i("Ctrl-c pressed exiting");
+            Log.i("[HOOK] Ctrl-c pressed exiting");
         }));
 
         while (globalRuntime.RUNNING) {

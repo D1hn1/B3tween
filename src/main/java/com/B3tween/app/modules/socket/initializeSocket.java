@@ -7,7 +7,7 @@ import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.objects.enums.Exceptions;
 
-public class initializeHttpSocket {
+public class initializeSocket {
 
     public Socket socket;
     public BufferedWriter out;
@@ -18,14 +18,14 @@ public class initializeHttpSocket {
      * @param requestData the request from the client.
      * @throws bException If an error occurs while getting IO.
      */
-    public initializeHttpSocket(requestDto requestData, String clientAddr) throws bException  {
+    public initializeSocket(requestDto requestData, String clientAddr) throws bException  {
 
         String socketHost = requestData.getURL().getHost();
         int socketPort = requestData.getURL().getPort() != null ?
                          Integer.parseInt(requestData.getURL().getPort()) :
                          requestData.getURL().getProtocol() == "http" ? 80 : 443;
         
-        Log.i("Client " + clientAddr + " -> " + requestData.getMethod().getLabel().toUpperCase()
+        Log.i("[PROXY] Client " + clientAddr + " -> " + requestData.getMethod().getLabel().toUpperCase()
             + " " + socketHost + ":" + socketPort);
 
         try {
