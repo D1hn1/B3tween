@@ -113,6 +113,7 @@ public class handleRoutes {
 
                         if (!authRepository.canUserLogin(username, password)) {
                             apiUtils.responses.loginConflict(clientSocket);
+                            Log.e("[API] User failed logging username=" + username);
                             break;
                         }
 

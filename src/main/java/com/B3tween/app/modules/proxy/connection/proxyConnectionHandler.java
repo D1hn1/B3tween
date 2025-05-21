@@ -22,7 +22,7 @@ public class proxyConnectionHandler {
         if (globalRuntime.PROXY_AUTHENTICATION) {
             if (!authProxyImpl.validateLogin(request)) {
                 proxyUtils.responses.proxyAuthenticationRequired(clientSocket);
-                Log.e("Client: " + clientSocket.getRemoteSocketAddress() + " failed authentication");
+                Log.e("[PROXY] Client: " + clientSocket.getRemoteSocketAddress() + " failed authentication");
                 return;
             }
             //Log.i("Client: " + clientSocket.getRemoteSocketAddress() + " authenticated");
@@ -61,15 +61,11 @@ public class proxyConnectionHandler {
         // ADD HTTP/HTTPS SUPPORT
         switch (request.getMethod()) {
             case CONNECT:
-                // ADD FOR JUST NOW THE FORWARD BYTE APROACH
-                // USE THE INITIALIZESOCKET CLASS AND CREATE ANOTHER FOR TLS 
-                httpsProxyHandler.dispatchRequest(connectionData);
+                proxyHttpsHandler.dispatchRequest(connectionData);
                 break;
         
             default:
-                // ADD FOR JUST NOW THE FORWARD DATA
-                // USE THE INITIALIZESOCKET CLASS
-                httpProxyHandler.dispatchRequest(connectionData);
+                proxyHttpHandler.dispatchRequest(connectionData);
                 break;
         }
 

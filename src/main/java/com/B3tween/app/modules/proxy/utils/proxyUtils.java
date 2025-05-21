@@ -65,11 +65,11 @@ public class proxyUtils {
             return requestDto.parseRequest(request.toString());
 
         } catch (IOException io) {
-            Log.e("Error while getting user input" + io);
+            Log.e("[PROXY] Error while getting user input" + io);
             return null;
 
         } catch (bException be) {
-            Log.e(be.getMessage());
+            Log.e("[PROXY]" + be.getMessage());
             return null;
 
         }
@@ -87,6 +87,7 @@ public class proxyUtils {
                 } catch (IOException io) {};
             });
         }
+        globalRuntime.threadPool.shutdown();
     }
 
     public static class responses {

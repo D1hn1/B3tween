@@ -11,9 +11,9 @@ import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.global.globalRuntime;
 import com.B3tween.app.modules.exception.bException;
-import com.B3tween.app.modules.socket.initializeHttpSocket;
+import com.B3tween.app.modules.socket.initializeSocket;
 
-public class httpProxyHandler {
+public class proxyHttpHandler {
     
     /**
      * Closes all the connection sockets.
@@ -35,8 +35,8 @@ public class httpProxyHandler {
 
         try {
             // Initialize IO and Sockets 
-            initializeHttpSocket forwardSocket =
-                new initializeHttpSocket(connectionData.getRequest(),
+            initializeSocket forwardSocket =
+                new initializeSocket(connectionData.getRequest(),
                 ""+connectionData.getClientSocket().getRemoteSocketAddress());
 
             BufferedWriter serverOut = forwardSocket.out;
@@ -108,7 +108,7 @@ public class httpProxyHandler {
         {} catch (bException e) {
             proxyUtils.responses.proxyBadGateway(
                     connectionData.getClientSocket());
-            Log.e("Error: " + e);
+            Log.e("[PROXY] Error: " + e);
         }
 
     }
