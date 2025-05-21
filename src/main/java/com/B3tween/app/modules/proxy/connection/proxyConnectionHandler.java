@@ -5,6 +5,7 @@ import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.connection.proxies.defaultProxy.defaultRouter;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
@@ -58,14 +59,13 @@ public class proxyConnectionHandler {
             .build();
         globalRuntime.connectionList.add(connectionData);
 
-        // ADD HTTP/HTTPS SUPPORT
-        switch (request.getMethod()) {
-            case CONNECT:
-                proxyHttpsHandler.dispatchRequest(connectionData);
+        // Parse ProxyType 
+        switch (globalRuntime.proxyType) {
+            case FORWARD:
+                defaultRouter.methodParser(connectionData, request);
                 break;
         
             default:
-                proxyHttpHandler.dispatchRequest(connectionData);
                 break;
         }
 

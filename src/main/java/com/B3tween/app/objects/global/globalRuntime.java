@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.connection.enums.ProxyType;
 
 @Setter
 public class globalRuntime {
@@ -38,5 +39,8 @@ public class globalRuntime {
 
     // JWT Secret
     public static String JWTSecret = "secret-word";
+
+    // Proxy selection
+    public static ProxyType proxyType = ProxyType.FORWARD;
 
 }

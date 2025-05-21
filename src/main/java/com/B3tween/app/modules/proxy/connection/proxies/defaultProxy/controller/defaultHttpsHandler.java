@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.proxy.connection;
+package com.B3tween.app.modules.proxy.connection.proxies.defaultProxy.controller;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.*;
 import com.B3tween.app.modules.exception.bException;
 
-public class proxyHttpsHandler {
+public class defaultHttpsHandler {
     
     /**
      * Relay bytes between client and server.

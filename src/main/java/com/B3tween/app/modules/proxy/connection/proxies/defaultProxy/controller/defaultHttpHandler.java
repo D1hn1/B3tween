@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.proxy.connection;
+package com.B3tween.app.modules.proxy.connection.proxies.defaultProxy.controller;
 
 import java.io.*;
 import java.net.*;
@@ -13,7 +13,7 @@ import com.B3tween.app.objects.global.globalRuntime;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.socket.initializeSocket;
 
-public class proxyHttpHandler {
+public class defaultHttpHandler {
     
     /**
      * Closes all the connection sockets.
