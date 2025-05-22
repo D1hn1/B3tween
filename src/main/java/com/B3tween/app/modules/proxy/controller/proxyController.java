@@ -12,8 +12,12 @@ import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.authProxyImpl;
 import com.B3tween.app.objects.global.globalRuntime;
 
-public class proxyConnectionHandler {
+public class proxyController {
  
+    /**
+     * Handles the client connection.
+     * @param clientSocket The client socket.
+     */
     public static void Handler(Socket clientSocket) {
 
         // Get client request

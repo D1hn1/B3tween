@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.www.api.controller.handleRoutes;
+import com.B3tween.app.modules.www.api.controller.apiController;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class apiListener {
@@ -17,7 +17,7 @@ public class apiListener {
         while (globalRuntime.RUNNING) {
             // Accept clients
             Socket clientSocket = socket.accept();
-            globalRuntime.threadPool.submit(() -> handleRoutes.Handle(clientSocket));
+            globalRuntime.threadPool.submit(() -> apiController.Handle(clientSocket));
         }
 
         // Close socket

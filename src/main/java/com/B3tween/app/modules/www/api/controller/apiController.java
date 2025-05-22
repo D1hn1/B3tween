@@ -11,7 +11,7 @@ import com.B3tween.app.modules.www.api.controller.routes.apiRegister;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 
-public class handleRoutes {
+public class apiController {
     
     public static void Handle(Socket clientSocket) {
 
