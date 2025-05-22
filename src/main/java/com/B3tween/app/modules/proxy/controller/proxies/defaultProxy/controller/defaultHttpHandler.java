@@ -1,11 +1,11 @@
-package com.B3tween.app.modules.proxy.connection.proxies.defaultProxy.controller;
+package com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.controller;
 
 import java.io.*;
 import java.net.*;
 import java.io.IOException;
 
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.controller.dto.connectionDto;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;

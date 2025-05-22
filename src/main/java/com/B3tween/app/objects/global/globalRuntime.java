@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 import lombok.Setter;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
-import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
-import com.B3tween.app.modules.proxy.connection.enums.ProxyType;
+import com.B3tween.app.modules.proxy.controller.dto.connectionDto;
+import com.B3tween.app.modules.proxy.controller.enums.ProxyType;
 
 @Setter
 public class globalRuntime {
