@@ -15,8 +15,7 @@ public class apiController {
     
     public static void Handle(Socket clientSocket) {
 
-        try (BufferedWriter writer = 
-                new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
+        try {
 
             // Get request from client
             requestDto request = proxyUtils.getRequest(clientSocket);

@@ -33,6 +33,7 @@ public class globalRuntime {
     // Constants
     public static int PROXY_PORT = 8080;
     public static int API_PORT = 8000;
+    public static int WEB_PORT = 8001;
 
     // Thread pool
     public static ExecutorService threadPool = Executors.newCachedThreadPool();
