@@ -22,36 +22,39 @@ public class frontController {
 
             // Get request from client
             requestDto request = proxyUtils.getRequest(clientSocket);
-            Log.i("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
-                + request.getURL().getPath());
 
             // Get file from path
-            String file = request.getURL().getPath().replace('/', ' ').trim();
+            String file = request.getURL().getPath();
 
             switch (request.getURL().getPath()) {
                 case "/":
+                    // Filter methods {@GET,.}
                     if (request.getMethod().equals(Method.GET)) {
                         // Send response
-                        webUtils.responseFound(writer, "index.html");
+                        webUtils.responseFound(writer, "/index.html");
+                        Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                            + request.getURL().getPath());
                     } else {
                         apiUtils.responses.methodNotAllowed(clientSocket);
                     }
                     break;
             
                 default:
+                    // Filter methods {@GET,.}
                     if (request.getMethod().equals(Method.GET)) {
-                        // Get file content
-                        String requestFile = webUtils.readFile(file);
-                        // Check for not existing files 
-                        if (requestFile == null) {
-                            String notFoundFile = webUtils.readFile("404.html");
-                            writer.write(notFoundFile);
-                            writer.flush();
-                            return;
+                        // Check file existance
+                        if (webUtils.doFileExists(file)) {
+                            // Send file
+                            webUtils.responseFound(writer, file);
+                            Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                                + request.getURL().getPath());
+                        } else {
+                            // Not found
+                            webUtils.responseNotFound(writer, "/404.html");
+                            // Log
+                            Log.e("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                                + request.getURL().getPath());
                         }
-                        // Send file
-                        writer.write(requestFile);
-                        writer.flush();
                     } else {
                         apiUtils.responses.methodNotAllowed(clientSocket);
                     }
