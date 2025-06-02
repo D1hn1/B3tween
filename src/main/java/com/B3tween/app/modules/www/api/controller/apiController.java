@@ -6,7 +6,6 @@ import java.net.*;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.www.api.controller.routes.apiLogin;
-import com.B3tween.app.modules.www.api.controller.routes.apiLogout;
 import com.B3tween.app.modules.www.api.controller.routes.apiRegister;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
@@ -55,13 +54,6 @@ public class apiController {
                     apiLogin.h(request, clientSocket);
                     break;
                 
-                /**
-                 *  /logout
-                 */
-                case "/logout":
-                    apiLogout.h(request, clientSocket);
-                    break;
-
                 default:
                     apiUtils.responses.resourceNotFound(clientSocket);
                     break;

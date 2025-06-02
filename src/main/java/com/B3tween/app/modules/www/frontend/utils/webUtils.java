@@ -2,7 +2,8 @@ package com.B3tween.app.modules.www.frontend.utils;
 
 import java.io.*;
 import java.util.*;
-
+import java.net.Socket;
+import java.nio.file.Files;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.responseDto;
@@ -20,12 +21,35 @@ public class webUtils {
     public static boolean doFileExists(String rawFile) {
         // Get file handler
         File file = new File(staticPath + rawFile);
+        // Check if file is a directory
+        if (file.isDirectory())
+            return false;
         // Check if file exists
-        if (file.exists()) {
+        if (file.exists())
             return true;
-        }
         // File does not exists
         return false;
+    }
+
+    /**
+     * Sends the favicon when requested
+     * @param clientSocket The client socket
+     * @param rawFavicon The path to the favicon
+     * @throws IOException If an error occurs while writing to the client
+     */
+    public static void sendFavicon(Socket clientSocket, String rawFavicon) throws IOException {
+        // Get favicon data
+        File favicon = new File(staticPath + rawFavicon);
+        OutputStream out = clientSocket.getOutputStream();
+        byte[] iconBytes = Files.readAllBytes(favicon.toPath());
+        responseDto response = responseDto.response("HTTP/1.1", 200, "Ok",
+            List.of(headerDto.header("Content-Type", "image/x-icon"),
+                    headerDto.header("Content-Length", ""+iconBytes.length),
+                    headerDto.header("Connection", "close")),
+            null);
+        out.write(response.toString().getBytes());
+        out.write(iconBytes);
+        out.flush();
     }
 
     /**
@@ -64,6 +88,47 @@ public class webUtils {
         // Send response
         writer.write(response.toString());
         writer.flush();
+    }
+
+    /**
+     * Sends a 403 when a client is not authorized 
+     * @param writer Client out stream
+     * @param rawFile String filename
+     * @throws IOException If an error occurs while writing to the client
+     */
+    public static void forbiddenAuth(BufferedWriter writer, String rawFile) throws IOException {
+        // Get file data
+        String file = readFile(rawFile);
+        // Build response
+        responseDto response = responseDto.response("HTTP/1.1", 403, "Forbidden",
+            List.of(headerDto.header("Content-Length", ""+file.length()),
+                    headerDto.header("Connection", "close")),
+            file);
+        // Send response
+        writer.write(response.toString());
+        writer.flush();
+    }
+
+    /**
+     * Sends a 405 when the method is not allowed.
+     * @param clientSocket The client socket.
+     */
+    public static void methodNotAllowed(BufferedWriter writer) {
+        try {
+            String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesn't support this method\", \"status\":405}";
+            responseDto response = responseDto.builder()
+                .httpVersion("HTTP/1.1")
+                .statusCode(405)
+                .reasonPhrase("Method Not Allowed")
+                .headers(new ArrayList<>(
+                    List.of(headerDto.header("Content-Type", "application/json"), 
+                            headerDto.header("Content-Length", ""+data.length()))
+                ))
+                .data(data)
+                .build();
+            writer.write(response.toString());
+            writer.flush();
+        } catch (IOException io) {}
     }
 
     /**

@@ -45,7 +45,7 @@ public class apiLogin {
             // Create JWT Token
             JwtDto jwt = JwtDto.builder()
                 .header("{ \"alg\": \"HS256\", \"typ\": \"JWT\" }")
-                .payload("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}")
+                .payload("{\"username\":\"" + username + "\",\"id\":"+user.getId()+"}")
                 .build();
             jwt.generateToken();
 
@@ -56,8 +56,10 @@ public class apiLogin {
             // Send response
             Log.l("[API] User logged in id=" + user.getId() + " username=" + user.getUsername());
             apiUtils.loginCorrectSetCookie(clientSocket,
-            "b3cookie=" + jwt.getToken(), "/");
+                "b3cookie="+jwt.getToken(), "/dashboard");
 
+        } else if (request.getMethod().equals(Method.OPTIONS)) {
+            apiUtils.responses.optionsResponse(clientSocket);
         } else {
             apiUtils.responses.methodNotAllowed(clientSocket);
         }

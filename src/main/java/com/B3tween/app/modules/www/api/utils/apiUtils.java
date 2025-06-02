@@ -3,12 +3,20 @@ package com.B3tween.app.modules.www.api.utils;
 import java.io.*;
 import java.net.*;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.responseDto;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class apiUtils {
+
+    // CORS Headers
+    private static List<headerDto> corsHeaders = 
+        List.of(headerDto.header("Access-Control-Allow-Origin", "http://"+globalRuntime.IP_HOST+":"+globalRuntime.WEB_PORT),
+                headerDto.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+                headerDto.header("Access-Control-Allow-Headers", "Content-Type"),
+                headerDto.header("Connection", "Close"));
 
     /**
      * Generates the next ID for the User.
@@ -26,12 +34,19 @@ public class apiUtils {
      */
     public static void loginCorrectSetCookie(Socket clientSocket, String cookie, String location) {
         try {
+            String data = "{\"location\":\""+location+"\",\"cookie\":\""+cookie+"\",\"status\":302}";
             BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            responseDto response = responseDto.response("HTTP/1.1", 302,
-                "Found",
-                List.of(headerDto.header("Location", location),
-                        headerDto.header("Set-Cookie", cookie)),
-                null);
+            responseDto response = responseDto.builder()
+                .httpVersion("HTTP/1.1")
+                .statusCode(302)
+                .reasonPhrase("Found")
+                .headers(new ArrayList<>(
+                    List.of(headerDto.header("Content-Type", "application/json"),
+                            headerDto.header("Content-Length", ""+data.length()))
+                ))
+                .data(data)
+                .build();
+            response.getHeaders().addAll(corsHeaders);
             clientOut.write(response.toString());
             clientOut.flush();
         } catch (IOException io) {}
@@ -46,10 +61,16 @@ public class apiUtils {
         public static void twoHundredOk(Socket clientSocket) {
             try {
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 200, 
-                    "Ok", 
-                    List.of(headerDto.header("Connection", "close")), 
-                    null);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(200)
+                    .reasonPhrase("Ok")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Connection", "close"))
+                    ))
+                    .data(null)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -61,11 +82,19 @@ public class apiUtils {
          */
         public static void foundRedirect(Socket clientSocket, String redirect) {
             try {
+                String data = "{\"location\":\""+redirect+"\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 302, 
-                    "Found", 
-                    List.of(headerDto.header("Location", redirect)), 
-                    null);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(302)
+                    .reasonPhrase("Found")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"), 
+                                headerDto.header("Content-Length", ""+data.length())) 
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -79,10 +108,18 @@ public class apiUtils {
             try {
                 String data = "{\"error\":\"Not Found\", \"message\":\"The requested resource was not found\", \"status\":404}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 404,
-                            "Not Found",
-                            List.of(headerDto.header("Content-Length", ""+data.length())),
-                            data);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(404)
+                    .reasonPhrase("Not Found")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -94,12 +131,19 @@ public class apiUtils {
          */
         public static void methodNotAllowed(Socket clientSocket) {
             try {
-                String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesnt support this method\", \"status\":405}";
+                String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesn't support this method\", \"status\":405}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 405,
-                    "Method Not Allowed", 
-                    List.of(headerDto.header("Content-Length", ""+data.length())), 
-                    data);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(405)
+                    .reasonPhrase("Method Not Allowed")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"), 
+                                headerDto.header("Content-Length", ""+data.length()))
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -113,10 +157,18 @@ public class apiUtils {
             try {
                 String data = "{\"error\":\"An error ocurred while registering\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 409,
-                    "Conflict",
-                    List.of(headerDto.header("Content-Length", ""+data.length())),
-                    data);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(409)
+                    .reasonPhrase("Conflict")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -130,10 +182,17 @@ public class apiUtils {
             try {
                 String data = "{\"error\":\"User already exists\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 409,
-                    "Conflict",
-                    List.of(headerDto.header("Content-Length", ""+data.length())),
-                    data);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(409)
+                    .reasonPhrase("Conflict")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
@@ -145,12 +204,34 @@ public class apiUtils {
          */
         public static void loginConflict(Socket clientSocket) {
             try {
-                String data = "{\"error\":\"An error ocurred while logging in\"}";
+                String data = "{\"error\":\"An error ocurred while logging in\",\"status\":409}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                responseDto response = responseDto.response("HTTP/1.1", 409,
-                    "Conflict",
-                    List.of(headerDto.header("Content-Length", ""+data.length())),
-                    data);
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(409)
+                    .reasonPhrase("Conflict")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(corsHeaders);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        public static void optionsResponse(Socket clientSocket) {
+            try {
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(200)
+                    .reasonPhrase("Ok")
+                    .headers(corsHeaders)
+                    .data(null)
+                    .build();
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}

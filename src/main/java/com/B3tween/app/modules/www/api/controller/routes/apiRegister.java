@@ -52,10 +52,9 @@ public class apiRegister {
             authRepository.save(user);
 
             // Response
-            // TODO: Redirect user to the login page
-            //apiUtils.responses.foundRedirect(clientSocket, "localhost:"+globalRuntime.WEB_PORT);
-            apiUtils.responses.twoHundredOk(clientSocket);
-
+            apiUtils.responses.foundRedirect(clientSocket, "/");
+        } else if (request.getMethod().equals(Method.OPTIONS)) {
+            apiUtils.responses.optionsResponse(clientSocket);
         } else {
             // Method not valid
             apiUtils.responses.methodNotAllowed(clientSocket);

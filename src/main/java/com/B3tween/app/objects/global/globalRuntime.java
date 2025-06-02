@@ -1,9 +1,9 @@
 package com.B3tween.app.objects.global;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import lombok.Setter;
 
@@ -31,6 +31,9 @@ public class globalRuntime {
     public static List<AuthDto> authList = new ArrayList<>();
 
     // Constants
+    // TODO: Get dynamicly the ip 
+    public static String IP_HOST = "localhost";
+
     public static int PROXY_PORT = 8080;
     public static int API_PORT = 8000;
     public static int WEB_PORT = 8001;
