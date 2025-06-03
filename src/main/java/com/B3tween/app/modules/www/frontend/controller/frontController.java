@@ -11,7 +11,7 @@ import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.enums.Method;
 
 public class frontController {
-   
+
     public static void Handle(Socket clientSocket) {
 
         try {
@@ -29,16 +29,8 @@ public class frontController {
                 case "/":
                     // Parse methods (eg., GET, POST)
                     if (request.getMethod().equals(Method.GET)) {
-                        if (jwtRepository.validateJWT(request)) {
-                            // User already logged in
-                            webUtils.responseFound(writer, "/dashboard.html");
-                        } else {
-                            // Send response
-                            webUtils.responseFound(writer, "/index.html");
-                        }
-                        Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
-                            + request.getURL().getPath());
-                    // Other methods
+                        // Redirect to /login
+                        webUtils.redirect(writer, "/login");
                     } else {
                         // Send method not allowed
                         webUtils.methodNotAllowed(writer);
@@ -50,10 +42,10 @@ public class frontController {
                     if (request.getMethod().equals(Method.GET)) {
                         if (jwtRepository.validateJWT(request)) {
                             // User already logged in
-                            webUtils.responseFound(writer, "/dashboard.html");
+                            webUtils.redirect(writer, "/dashboard");
                         } else {
                             // Send response
-                            webUtils.responseFound(writer, "/index.html");
+                            webUtils.responseFound(writer, "/html/index.html");
                         }
                         Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
                             + request.getURL().getPath());
@@ -67,7 +59,7 @@ public class frontController {
                 case "/register":
                     if (request.getMethod().equals(Method.GET)) {
                         // Send response
-                        webUtils.responseFound(writer, "/register.html");
+                        webUtils.responseFound(writer, "/html/register.html");
                         Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
                             + request.getURL().getPath());
                     // Other methods
@@ -81,12 +73,12 @@ public class frontController {
                     if (request.getMethod().equals(Method.GET)) {
                         // Validate JWT
                         if (jwtRepository.validateJWT(request)) {
-                            webUtils.responseFound(writer, "/dashboard.html");
+                            webUtils.responseFound(writer, "/html/dashboard.html");
                             Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
                                 + request.getURL().getPath());
                         } else {
                             // JWT Not valid
-                            webUtils.forbiddenAuth(writer, "/403.html");
+                            webUtils.forbiddenAuth(writer, "/errors/403.html");
                         }
                     } else {
                         // Send method not allowed
@@ -100,7 +92,7 @@ public class frontController {
                     // Check for folder retrieval
                     if (filePath.contains("/css/") ||
                         filePath.contains("/js/")) {
-                        // Check file existance
+                        // Check file existence
                         if (webUtils.doFileExists(filePath)) {
                             // Send response
                             webUtils.responseFound(writer, filePath);
@@ -116,7 +108,7 @@ public class frontController {
                         break;
                     }
                     // Send a 404 when a resource is not found
-                    webUtils.responseNotFound(writer, "/404.html");
+                    webUtils.responseNotFound(writer, "/errors/404.html");
                     Log.e("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
                         + request.getURL().getPath());
                     break;

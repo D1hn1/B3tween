@@ -13,7 +13,7 @@ public class apiUtils {
 
     // CORS Headers
     private static List<headerDto> corsHeaders = 
-        List.of(headerDto.header("Access-Control-Allow-Origin", "http://"+globalRuntime.IP_HOST+":"+globalRuntime.WEB_PORT),
+        List.of(headerDto.header("Access-Control-Allow-Origin", "*"),
                 headerDto.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
                 headerDto.header("Access-Control-Allow-Headers", "Content-Type"),
                 headerDto.header("Connection", "Close"));

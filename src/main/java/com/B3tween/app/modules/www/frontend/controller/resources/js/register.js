@@ -8,6 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Convert form to JSON
         const JSONdata = Object.fromEntries(formData.entries());
         const JSONString = JSON.stringify(JSONdata);
+        // Check for valid password
+        if (JSONdata.password != JSONdata.confirm_password) {
+            resultString.style.display = "inline";
+            resultString.innerText = registerErrorPasswordsDoNotMatch;
+            console.log(registerErrorPasswordsDoNotMatch);
+            return;
+        }
         // Send fetch
         try {
             await fetch(apiHost+"/auth/register", {

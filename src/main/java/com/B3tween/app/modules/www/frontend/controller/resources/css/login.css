@@ -43,6 +43,8 @@ body h1 {
     margin-bottom: 10px;
     font-size: .9rem;
     padding: 5px;
+
+    border-radius: 2px;
 }
 
 #loginForm input[type=submit] {

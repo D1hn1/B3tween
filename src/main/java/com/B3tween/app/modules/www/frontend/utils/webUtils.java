@@ -111,24 +111,43 @@ public class webUtils {
 
     /**
      * Sends a 405 when the method is not allowed.
-     * @param clientSocket The client socket.
+     * @param writer The client output stream.
      */
-    public static void methodNotAllowed(BufferedWriter writer) {
-        try {
-            String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesn't support this method\", \"status\":405}";
-            responseDto response = responseDto.builder()
+    public static void methodNotAllowed(BufferedWriter writer) throws IOException {
+        String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesn't support this method\", \"status\":405}";
+        responseDto response = responseDto.builder()
+            .httpVersion("HTTP/1.1")
+            .statusCode(405)
+            .reasonPhrase("Method Not Allowed")
+            .headers(new ArrayList<>(
+                List.of(headerDto.header("Content-Type", "application/json"),
+                        headerDto.header("Content-Length", ""+data.length()))
+            ))
+            .data(data)
+            .build();
+        writer.write(response.toString());
+        writer.flush();
+    }
+
+    /**
+     * Send 301 and redirecting to user to another page.
+     * @param writer The client output stream.
+     * @param redirectTo The page to redirect.
+     * @throws IOException If an error occurs while writing to the user.
+     */
+    public static void redirect(BufferedWriter writer, String redirectTo) throws IOException {
+        responseDto response = responseDto.builder()
                 .httpVersion("HTTP/1.1")
-                .statusCode(405)
-                .reasonPhrase("Method Not Allowed")
+                .statusCode(301)
+                .reasonPhrase("Moved Permanently")
                 .headers(new ArrayList<>(
-                    List.of(headerDto.header("Content-Type", "application/json"), 
-                            headerDto.header("Content-Length", ""+data.length()))
+                        List.of(headerDto.header("Location", redirectTo),
+                                headerDto.header("Connection", "close"))
                 ))
-                .data(data)
+                .data(null)
                 .build();
-            writer.write(response.toString());
-            writer.flush();
-        } catch (IOException io) {}
+        writer.write(response.toString());
+        writer.flush();
     }
 
     /**
