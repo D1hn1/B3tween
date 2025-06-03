@@ -52,7 +52,7 @@ public class apiRegister {
             authRepository.save(user);
 
             // Response
-            apiUtils.responses.foundRedirect(clientSocket, "/");
+            apiUtils.responses.foundRedirect(clientSocket, "/login");
         } else if (request.getMethod().equals(Method.OPTIONS)) {
             apiUtils.responses.optionsResponse(clientSocket);
         } else {

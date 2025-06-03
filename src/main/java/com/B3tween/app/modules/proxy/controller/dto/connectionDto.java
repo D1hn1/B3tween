@@ -21,8 +21,4 @@ public class connectionDto {
     private BufferedReader clientIn;
     private BufferedWriter clientOut;
 
-    // Data
-    private int bytesIn;
-    private int bytesOut;
-
 }

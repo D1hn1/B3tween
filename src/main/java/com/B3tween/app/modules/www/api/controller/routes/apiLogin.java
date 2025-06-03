@@ -2,7 +2,6 @@ package com.B3tween.app.modules.www.api.controller.routes;
 
 import java.net.*;
 import org.json.*;
-import java.time.Instant;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.enums.Method;
@@ -48,10 +47,6 @@ public class apiLogin {
                 .payload("{\"username\":\"" + username + "\",\"id\":"+user.getId()+"}")
                 .build();
             jwt.generateToken();
-
-            // Set JWT to user DTO & update user dto
-            user.setLoggedIn(true);
-            user.setUpdatedAt(Instant.now().toEpochMilli());
 
             // Send response
             Log.l("[API] User logged in id=" + user.getId() + " username=" + user.getUsername());

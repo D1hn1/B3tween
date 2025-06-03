@@ -59,7 +59,6 @@ public class proxyController {
             .clientIn(clientIn)
             .clientOut(clientOut)
             .isKeepAlive(isKeepAlive)
-            .bytesIn(request.getData().length())
             .build();
         globalRuntime.connectionList.add(connectionData);
 
