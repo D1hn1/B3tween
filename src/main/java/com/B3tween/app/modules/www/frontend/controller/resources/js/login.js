@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                     case 302:
                         document.cookie = data.cookie;
+                        localStorage.setItem("uid", data.uid);
                         window.location = data.location;
                         break;
                 }

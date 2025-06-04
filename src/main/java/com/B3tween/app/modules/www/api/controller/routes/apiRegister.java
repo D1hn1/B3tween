@@ -9,6 +9,7 @@ import com.B3tween.app.objects.enums.Method;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
+import com.B3tween.app.modules.proxy.token.ProxyToken;
 import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class apiRegister {
@@ -38,6 +39,9 @@ public class apiRegister {
                 return;
             }
 
+            // Generate unique token
+            String userToken = ProxyToken.generate();
+
             // Auth DTO
             AuthDto user = AuthDto.builder()
                 .id(apiUtils.getNextUserId())
@@ -45,6 +49,7 @@ public class apiRegister {
                 .updatedAt(Instant.now().toEpochMilli())
                 .username(username)
                 .password(password)
+                .proxyToken(userToken)
                 .build();
 
             // Save user

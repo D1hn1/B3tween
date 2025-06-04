@@ -32,9 +32,9 @@ public class apiUtils {
      * @param clientSocket The client socket
      * @param cookie The cookie to set
      */
-    public static void loginCorrectSetCookie(Socket clientSocket, String cookie, String location) {
+    public static void loginCorrectSetCookie(Socket clientSocket, int userId, String cookie, String location) {
         try {
-            String data = "{\"location\":\""+location+"\",\"cookie\":\""+cookie+"\",\"status\":302}";
+            String data = "{\"location\":\""+location+"\",\"cookie\":\""+cookie+"\",\"status\":302,\"uid\":"+userId+"}";
             BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             responseDto response = responseDto.builder()
                 .httpVersion("HTTP/1.1")
@@ -53,6 +53,79 @@ public class apiUtils {
     }
 
     public static class responses {
+
+        /**
+         * Sends a 500 when something goes wrong
+         * @param clientSocket The client socket
+         */
+        public static void internalError(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"Internal Server Error\", \"message\":\"An error has occurred\", \"status\":500}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                        .httpVersion("HTTP/1.1")
+                        .statusCode(500)
+                        .reasonPhrase("Internal Server Error")
+                        .headers(new ArrayList<>(
+                                List.of(headerDto.header("Content-Type", "application/json"),
+                                        headerDto.header("Content-Length", ""+data.length()))
+                        ))
+                        .data(data)
+                        .build();
+                response.getHeaders().addAll(corsHeaders);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
+         * Sends a 403 when a user has no access to a resource
+         * @param clientSocket The client socket
+         */
+        public static void forbiddenAuth(Socket clientSocket) {
+            try {
+                String data = "{\"error\":\"Forbidden\", \"message\":\"User is not authorized\", \"status\":403}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                        .httpVersion("HTTP/1.1")
+                        .statusCode(403)
+                        .reasonPhrase("Forbidden")
+                        .headers(new ArrayList<>(
+                                List.of(headerDto.header("Content-Type", "application/json"),
+                                        headerDto.header("Content-Length", ""+data.length()))
+                        ))
+                        .data(data)
+                        .build();
+                response.getHeaders().addAll(corsHeaders);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
+
+        /**
+         * Sends a 302 with the proxy token
+         * @param clientSocket The client socket
+         * @param proxyToken The client proxy token
+         */
+        public static void sendProxyToken(Socket clientSocket, String proxyToken) {
+            try {
+                String data = "{\"proxyToken\":\""+proxyToken+"\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                        .httpVersion("HTTP/1.1")
+                        .statusCode(302)
+                        .reasonPhrase("Found")
+                        .headers(new ArrayList<>(
+                                List.of(headerDto.header("Content-Type", "application/json"),
+                                        headerDto.header("Content-Length", ""+data.length()))
+                        ))
+                        .data(data)
+                        .build();
+                response.getHeaders().addAll(corsHeaders);
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+        }
 
         /**
          * Sends a 200 Ok.

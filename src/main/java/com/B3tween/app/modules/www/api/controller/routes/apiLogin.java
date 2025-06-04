@@ -50,7 +50,7 @@ public class apiLogin {
 
             // Send response
             Log.l("[API] User logged in id=" + user.getId() + " username=" + user.getUsername());
-            apiUtils.loginCorrectSetCookie(clientSocket,
+            apiUtils.loginCorrectSetCookie(clientSocket, user.getId(),
                 "b3cookie="+jwt.getToken(), "/dashboard");
 
         } else if (request.getMethod().equals(Method.OPTIONS)) {

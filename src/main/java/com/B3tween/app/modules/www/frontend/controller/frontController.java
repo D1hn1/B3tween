@@ -33,8 +33,10 @@ public class frontController {
                         webUtils.redirect(writer, "/login");
                     } else {
                         // Send method not allowed
-                        webUtils.methodNotAllowed(writer);
+                        webUtils.methodNotAllowed(writer, "/errors/405.html");
                     }
+                    Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                            + request.getURL().getPath());
                     break;
  
                 case "/login":
@@ -47,26 +49,26 @@ public class frontController {
                             // Send response
                             webUtils.responseFound(writer, "/html/index.html");
                         }
-                        Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
-                            + request.getURL().getPath());
                     // Other methods
                     } else {
                         // Send method not allowed
-                        webUtils.methodNotAllowed(writer);
+                        webUtils.methodNotAllowed(writer, "/errors/405.html");
                     }
+                    Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                            + request.getURL().getPath());
                     break;
 
                 case "/register":
                     if (request.getMethod().equals(Method.GET)) {
                         // Send response
                         webUtils.responseFound(writer, "/html/register.html");
-                        Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
-                            + request.getURL().getPath());
                     // Other methods
                     } else {
                         // Send method not allowed
-                        webUtils.methodNotAllowed(writer);
+                        webUtils.methodNotAllowed(writer, "/errors/405.html");
                     }
+                    Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                            + request.getURL().getPath());
                     break;
                 
                 case "/dashboard":
@@ -74,16 +76,16 @@ public class frontController {
                         // Validate JWT
                         if (jwtRepository.validateJWT(request)) {
                             webUtils.responseFound(writer, "/html/dashboard.html");
-                            Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
-                                + request.getURL().getPath());
                         } else {
                             // JWT Not valid
                             webUtils.forbiddenAuth(writer, "/errors/403.html");
                         }
                     } else {
                         // Send method not allowed
-                        webUtils.methodNotAllowed(writer);
+                        webUtils.methodNotAllowed(writer, "/errors/405.html");
                     }
+                    Log.l("[WEB] " + request.getMethod().getLabel().toUpperCase() + " "
+                            + request.getURL().getPath());
                     break;
 
                 default:

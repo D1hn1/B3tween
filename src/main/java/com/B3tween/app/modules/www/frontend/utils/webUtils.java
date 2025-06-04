@@ -64,6 +64,9 @@ public class webUtils {
         // Build response
         responseDto response = responseDto.response("HTTP/1.1", 200, "Ok",
             List.of(headerDto.header("Content-Length", ""+file.length()),
+                    headerDto.header("Cache-Control", "no-store, no-cache, must-revalidate"),
+                    headerDto.header("Pragma", "no-cache"),
+                    headerDto.header("Expires", "0"),
                     headerDto.header("Conntection", "close")),
             file);
         // Send response
@@ -83,6 +86,9 @@ public class webUtils {
         // Build response
         responseDto response = responseDto.response("HTTP/1.1", 404, "Not Found",
             List.of(headerDto.header("Content-Length", ""+file.length()),
+                    headerDto.header("Cache-Control", "no-store, no-cache, must-revalidate"),
+                    headerDto.header("Pragma", "no-cache"),
+                    headerDto.header("Expires", "0"),
                     headerDto.header("Connection", "close")),
             file);
         // Send response
@@ -102,6 +108,9 @@ public class webUtils {
         // Build response
         responseDto response = responseDto.response("HTTP/1.1", 403, "Forbidden",
             List.of(headerDto.header("Content-Length", ""+file.length()),
+                    headerDto.header("Cache-Control", "no-store, no-cache, must-revalidate"),
+                    headerDto.header("Pragma", "no-cache"),
+                    headerDto.header("Expires", "0"),
                     headerDto.header("Connection", "close")),
             file);
         // Send response
@@ -112,25 +121,27 @@ public class webUtils {
     /**
      * Sends a 405 when the method is not allowed.
      * @param writer The client output stream.
+     * @param rawFile String filename
+     * @throws IOException If an error occurs while writing to the client
      */
-    public static void methodNotAllowed(BufferedWriter writer) throws IOException {
-        String data = "{\"error\":\"Method not allowed\", \"message\":\"This endpoint doesn't support this method\", \"status\":405}";
-        responseDto response = responseDto.builder()
-            .httpVersion("HTTP/1.1")
-            .statusCode(405)
-            .reasonPhrase("Method Not Allowed")
-            .headers(new ArrayList<>(
-                List.of(headerDto.header("Content-Type", "application/json"),
-                        headerDto.header("Content-Length", ""+data.length()))
-            ))
-            .data(data)
-            .build();
+    public static void methodNotAllowed(BufferedWriter writer, String rawFile) throws IOException {
+        // Get file data
+        String file = readFile(rawFile);
+        // Build resopnse
+        responseDto response = responseDto.response("HTTP/1.1", 405, "Method Not Allowed",
+                List.of(headerDto.header("Content-Length", ""+file.length()),
+                        headerDto.header("Cache-Control", "no-store, no-cache, must-revalidate"),
+                        headerDto.header("Pragma", "no-cache"),
+                        headerDto.header("Expires", "0"),
+                        headerDto.header("Connection", "close")),
+                file);
+        // Send response
         writer.write(response.toString());
         writer.flush();
     }
 
     /**
-     * Send 301 and redirecting to user to another page.
+     * Send 302 and redirecting to user to another page.
      * @param writer The client output stream.
      * @param redirectTo The page to redirect.
      * @throws IOException If an error occurs while writing to the user.
@@ -138,8 +149,8 @@ public class webUtils {
     public static void redirect(BufferedWriter writer, String redirectTo) throws IOException {
         responseDto response = responseDto.builder()
                 .httpVersion("HTTP/1.1")
-                .statusCode(301)
-                .reasonPhrase("Moved Permanently")
+                .statusCode(302)
+                .reasonPhrase("Found")
                 .headers(new ArrayList<>(
                         List.of(headerDto.header("Location", redirectTo),
                                 headerDto.header("Connection", "close"))

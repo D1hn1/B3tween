@@ -3,4 +3,5 @@ document.getElementById("logout-button").addEventListener('click', () => {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     window.location = "/";
+    localStorage.setItem("uid", "");
 });

@@ -34,7 +34,7 @@ public class authRepository {
     }
 
     /**
-     * Gets AuthDTto from username and password
+     * Gets AuthDto from username and password
      * @param username String username
      * @param password String password
      * @return Null if the list is empty or the user is not found
@@ -51,6 +51,26 @@ public class authRepository {
             }
         }
         // Return null if no user is founded
+        return null;
+    }
+
+    /**
+     * Gets AuthDto from UID
+     * @param uid The user ID
+     * @return Null if the list is empty or the user is not found
+     *         or AuthDto the user DTO.
+     */
+    public static AuthDto getUserById(int uid) {
+        // Check if list is empty
+        if (globalRuntime.authList.isEmpty())
+            return null;
+        // Loop through auth list
+        for (AuthDto dto : globalRuntime.authList) {
+            if (dto.getId() == uid) {
+                return dto;
+            }
+        }
+        // Return if no user is founded
         return null;
     }
 
