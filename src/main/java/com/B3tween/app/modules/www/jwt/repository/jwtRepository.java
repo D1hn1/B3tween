@@ -1,9 +1,11 @@
 package com.B3tween.app.modules.www.jwt.repository;
 
 import java.util.Base64;
+import org.json.JSONObject;
 import com.B3tween.app.modules.www.jwt.dto.JwtDto;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
+import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class jwtRepository {
  
@@ -24,6 +26,10 @@ public class jwtRepository {
                 // Decode header && payload
                 String decodedHea = new String(Base64.getDecoder().decode(rawHea));
                 String decodedPay = new String(Base64.getDecoder().decode(rawPay));
+                // Validate user
+                JSONObject json = new JSONObject(decodedPay);
+                if (authRepository.getUser(json.getString("username")) == null)
+                    return false;
                 // Build new JWT
                 JwtDto jwt = JwtDto.builder()
                     .header(decodedHea)

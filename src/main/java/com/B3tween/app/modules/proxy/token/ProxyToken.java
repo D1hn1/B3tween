@@ -2,6 +2,7 @@ package com.B3tween.app.modules.proxy.token;
 
 import java.util.Base64;
 import java.security.SecureRandom;
+import com.B3tween.app.objects.global.globalRuntime;
 
 public class ProxyToken {
 
@@ -13,7 +14,8 @@ public class ProxyToken {
      * @return A unique token
      */
     public static String generate() {
-        byte[] randomBytes = new byte[32];
+        byte[] randomBytes =
+                new byte[globalRuntime.proxyTokenLength];
         secureRandom.nextBytes(randomBytes);
         return base64encoder.encodeToString(randomBytes);
     }

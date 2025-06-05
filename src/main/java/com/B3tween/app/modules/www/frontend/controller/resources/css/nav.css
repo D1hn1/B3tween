@@ -26,8 +26,23 @@
     text-decoration: none;
     border: 0;
     color: black;
+    cursor: pointer;
+}
+
+#nav section button {
+    text-decoration: none;
+    border: 0;
+    outline: none;
+    color: black;
+    background:none;
+    cursor: pointer;
+
+    font-size: 1rem;
 }
 
 #nav section a:hover {
+    color: blue;
+}
+#nav section button:hover {
     color: blue;
 }

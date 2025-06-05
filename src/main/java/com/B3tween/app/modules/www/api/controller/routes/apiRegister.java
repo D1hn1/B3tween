@@ -19,7 +19,8 @@ public class apiRegister {
      * @param request Client request.
      * @param clientSocket Client Socket.
      */
-    public static void h(requestDto request, Socket clientSocket) {
+    public static void h(requestDto request, Socket clientSocket, String origin) {
+        // Parse methods
         if (request.getMethod().equals(Method.POST)) {
 
             // Parse JSON
@@ -29,13 +30,13 @@ public class apiRegister {
 
             // Check for null values
             if (username.isEmpty() || password.isEmpty()) {
-                apiUtils.responses.registerConflict(clientSocket);
+                apiUtils.responses.registerConflict(clientSocket, origin);
                 return;
             }
 
             // Check if user exists
             if (!authRepository.canUserRegister(username)) {
-                apiUtils.responses.registerConflictUsername(clientSocket);
+                apiUtils.responses.registerConflictUsername(clientSocket, origin);
                 return;
             }
 
@@ -57,12 +58,12 @@ public class apiRegister {
             authRepository.save(user);
 
             // Response
-            apiUtils.responses.foundRedirect(clientSocket, "/login");
+            apiUtils.responses.foundRedirect(clientSocket, "/login", origin);
         } else if (request.getMethod().equals(Method.OPTIONS)) {
-            apiUtils.responses.optionsResponse(clientSocket);
+            apiUtils.responses.optionsResponse(clientSocket, origin);
         } else {
             // Method not valid
-            apiUtils.responses.methodNotAllowed(clientSocket);
+            apiUtils.responses.methodNotAllowed(clientSocket, origin);
         }
 
     }

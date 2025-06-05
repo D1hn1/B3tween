@@ -18,10 +18,10 @@ public class apiGetToken {
      * @param request User request
      * @param clientSocket The client socket
      */
-    public static void h(requestDto request, Socket clientSocket) {
+    public static void h(requestDto request, Socket clientSocket, String origin) {
         // OPTIONS Method
         if (request.getMethod().equals(Method.OPTIONS)) {
-            apiUtils.responses.optionsResponse(clientSocket);
+            apiUtils.responses.optionsResponse(clientSocket, origin);
             return;
         }
         // POST Method
@@ -42,19 +42,20 @@ public class apiGetToken {
                     // Send user token
                     apiUtils.responses.sendProxyToken(
                             clientSocket,
-                            user.getProxyToken()
+                            user.getProxyToken(),
+                            origin
                     );
                 } catch (NumberFormatException nfe) {
                     Log.e(nfe.getMessage());
-                    apiUtils.responses.internalError(clientSocket);
+                    apiUtils.responses.internalError(clientSocket, origin);
                 }
             } else {
                 // Not authed user
-                apiUtils.responses.forbiddenAuth(clientSocket);
+                apiUtils.responses.forbiddenAuth(clientSocket, origin);
             }
         } else {
             // Method not allowed
-            apiUtils.responses.methodNotAllowed(clientSocket);
+            apiUtils.responses.methodNotAllowed(clientSocket, origin);
         }
 
     }

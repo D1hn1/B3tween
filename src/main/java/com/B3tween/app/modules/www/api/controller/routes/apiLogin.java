@@ -18,7 +18,7 @@ public class apiLogin {
      * @param request User request.
      * @param clientSocket Client socket.
      */
-    public static void h(requestDto request, Socket clientSocket) {
+    public static void h(requestDto request, Socket clientSocket, String origin) {
         // Parse method
         if (request.getMethod().equals(Method.POST)) {
 
@@ -27,19 +27,19 @@ public class apiLogin {
             String password = json.getString("password").trim();
 
             if (username.isEmpty() || password.isEmpty()) {
-                apiUtils.responses.loginConflict(clientSocket);
+                apiUtils.responses.loginConflict(clientSocket, origin);
                 return;
             }
 
             if (!authRepository.canUserLogin(username, password)) {
-                apiUtils.responses.loginConflict(clientSocket);
+                apiUtils.responses.loginConflict(clientSocket, origin);
                 Log.e("[API] User failed logging username=" + username +
                     " from=" + clientSocket.getRemoteSocketAddress());
                 return;
             }
 
             // Get the user
-            AuthDto user = authRepository.getUser(username, password);
+            AuthDto user = authRepository.getUser(username);
 
             // Create JWT Token
             JwtDto jwt = JwtDto.builder()
@@ -51,12 +51,12 @@ public class apiLogin {
             // Send response
             Log.l("[API] User logged in id=" + user.getId() + " username=" + user.getUsername());
             apiUtils.loginCorrectSetCookie(clientSocket, user.getId(),
-                "b3cookie="+jwt.getToken(), "/dashboard");
+                "b3cookie="+jwt.getToken(), "/dashboard", origin);
 
         } else if (request.getMethod().equals(Method.OPTIONS)) {
-            apiUtils.responses.optionsResponse(clientSocket);
+            apiUtils.responses.optionsResponse(clientSocket, origin);
         } else {
-            apiUtils.responses.methodNotAllowed(clientSocket);
+            apiUtils.responses.methodNotAllowed(clientSocket, origin);
         }
 
     }

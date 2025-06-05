@@ -31,9 +31,6 @@ public class globalRuntime {
     public static List<AuthDto> authList = new ArrayList<>();
 
     // Constants
-    // TODO: Get dynamicly the ip 
-    public static String IP_HOST = "localhost";
-
     public static int PROXY_PORT = 8080;
     public static int API_PORT = 8000;
     public static int WEB_PORT = 8001;
@@ -43,6 +40,9 @@ public class globalRuntime {
 
     // JWT Secret
     public static String JWTSecret = "secret-word";
+
+    // Proxy token length
+    public static int proxyTokenLength = 48;
 
     // Proxy selection
     public static ProxyType proxyType = ProxyType.FORWARD;

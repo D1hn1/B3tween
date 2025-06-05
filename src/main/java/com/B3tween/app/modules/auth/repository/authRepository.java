@@ -36,17 +36,16 @@ public class authRepository {
     /**
      * Gets AuthDto from username and password
      * @param username String username
-     * @param password String password
      * @return Null if the list is empty or the user is not found
      *         or AuthDto the user DTO.
      */
-    public static AuthDto getUser(String username, String password) {
+    public static AuthDto getUser(String username) {
         // Check if list is empty
         if (globalRuntime.authList.isEmpty())
             return null;
         // Loop through auth list
         for (AuthDto dto : globalRuntime.authList) {
-            if (dto.getUsername().equals(username) && dto.getPassword().equals(password)) {
+            if (dto.getUsername().equals(username)) {
                 return dto;
             }
         }

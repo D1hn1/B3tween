@@ -22,6 +22,9 @@ public class apiController {
             Log.i("[API] " + request.getMethod().getLabel().toUpperCase() + " " 
                 + request.getURL().getPath());
 
+            // Get origin
+            String origin = apiUtils.getOrigin(request);
+
             // Parse routes
             switch (request.getURL().getPath()) {
 
@@ -30,7 +33,7 @@ public class apiController {
                  *  Functions like a Health Check
                  */
                 case "/":
-                    apiUtils.responses.twoHundredOk(clientSocket);
+                    apiUtils.responses.twoHundredOk(clientSocket, origin);
                     break;
                 
                 /**
@@ -40,7 +43,7 @@ public class apiController {
                  *  - password: String
                  */
                 case "/auth/register":
-                    apiRegister.h(request, clientSocket);
+                    apiRegister.h(request, clientSocket, origin);
                     break;
  
                 /**
@@ -50,7 +53,7 @@ public class apiController {
                  *  - password: String
                  */
                 case "/auth/login":
-                    apiLogin.h(request, clientSocket);
+                    apiLogin.h(request, clientSocket, origin);
                     break;
 
                 /**
@@ -59,11 +62,11 @@ public class apiController {
                  *  - uid: String (UserId)
                  */
                 case "/get-token":
-                    apiGetToken.h(request, clientSocket);
+                    apiGetToken.h(request, clientSocket, origin);
                     break;
                 
                 default:
-                    apiUtils.responses.resourceNotFound(clientSocket);
+                    apiUtils.responses.resourceNotFound(clientSocket, origin);
                     break;
             }
 
