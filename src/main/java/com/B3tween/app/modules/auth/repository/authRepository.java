@@ -73,4 +73,25 @@ public class authRepository {
         return null;
     }
 
+    /**
+     * Retrieves an user by its proxy token
+     * @param token The user proxy token
+     * @return Null if the list is empty or if the user is not found
+     *         or AuthDto the user DTO.
+     * @see {@link com.B3tween.app.modules.proxy.token}
+     */
+    public static AuthDto getUserByToken(String token) {
+        // Check if list is empty
+        if (globalRuntime.authList.isEmpty())
+            return null;
+        // Loop through auth list
+        for (AuthDto dto : globalRuntime.authList) {
+            if (dto.getProxyToken().equals(token)) {
+                return dto;
+            }
+        }
+        // Return if no user is founded
+        return null;
+    }
+
 }

@@ -15,6 +15,7 @@ public class connectionDto {
 
     // Fields
     private int id;
+    private int userId;
     private requestDto request;
     private Socket clientSocket;
     private boolean isKeepAlive;

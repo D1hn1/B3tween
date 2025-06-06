@@ -10,6 +10,7 @@ import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.authProxyImpl;
+import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class proxyController {
@@ -33,6 +34,13 @@ public class proxyController {
             //Log.i("Client: " + clientSocket.getRemoteSocketAddress() + " authenticated");
         }
 
+        // Get AUTHDTO
+        AuthDto user = proxyUtils.getAuthDtoFromRequest(request);
+        if (user == null) {
+            proxyUtils.responses.proxyAuthenticationRequired(clientSocket);
+            return;
+        }
+
         // Get user I/O
         BufferedReader clientIn = null;
         BufferedWriter clientOut = null;
@@ -54,6 +62,7 @@ public class proxyController {
         // Connection DTO
         connectionDto connectionData = connectionDto.builder()
             .id(proxyUtils.getNextId())
+            .userId(user.getId())
             .request(request)
             .clientSocket(clientSocket)
             .clientIn(clientIn)
@@ -65,7 +74,7 @@ public class proxyController {
         // Parse ProxyType 
         switch (globalRuntime.proxyType) {
             case FORWARD:
-                defaultRouter.methodParser(connectionData, request);
+                defaultRouter.methodParser(connectionData, request, user);
                 break;
         
             default:

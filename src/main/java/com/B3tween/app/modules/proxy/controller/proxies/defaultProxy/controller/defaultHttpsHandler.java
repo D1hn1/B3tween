@@ -9,6 +9,8 @@ import com.B3tween.app.objects.global.globalRuntime;
 
 import java.io.*;
 import java.net.*;
+
+import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.exception.bException;
 
 public class defaultHttpsHandler {
@@ -19,16 +21,20 @@ public class defaultHttpsHandler {
      * @param out Write Socket
      * @param clientSocket Client Socket
      */
-    private static void relayBytes(InputStream in, OutputStream out, Socket clientSocket) {
+    private static void relayBytes(InputStream in, OutputStream out, Socket clientSocket, AuthDto user) {
         globalRuntime.threadPool.submit(() -> {
             try {
+                // User data
+                int totalData = 0;
                 // Recv data & send it
                 int bytesRead = 0;
                 byte[] buffer = new byte[8192];
                 while ((bytesRead = in.read(buffer)) != -1) {
+                    totalData+=bytesRead;
                     out.write(buffer, 0, bytesRead);
                 }
                 out.flush();
+                // TODO: Update user with @totalData
                 // Close socket
                 clientSocket.close();
             } catch (IOException io) {}
@@ -39,7 +45,7 @@ public class defaultHttpsHandler {
      * Handle the proxy https connection.
      * @param connectionData The connection DTO.
      */
-    public static void dispatchRequest(connectionDto connectionData) {
+    public static void dispatchRequest(connectionDto connectionData, AuthDto user) {
 
         try {
             // Initialize IO and Sockets
@@ -64,8 +70,8 @@ public class defaultHttpsHandler {
             proxyUtils.responses.connectionEstablished(connectionData.getClientSocket());
 
             // Transmit data
-            relayBytes(clientIn, serverOutBytes, connectionData.getClientSocket());
-            relayBytes(serverIn, clientOutBytes, connectionData.getClientSocket());
+            relayBytes(clientIn, serverOutBytes, connectionData.getClientSocket(), user);
+            relayBytes(serverIn, clientOutBytes, connectionData.getClientSocket(), user);
 
         } catch (IOException io)
         {} catch (bException e) {

@@ -2,6 +2,7 @@ package com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.controller
 
 import java.io.*;
 import java.net.*;
+import java.time.Instant;
 import java.io.IOException;
 
 import com.B3tween.app.modules.log.Log;
@@ -10,6 +11,7 @@ import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.global.globalRuntime;
+import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.socket.initializeSocket;
 
@@ -31,7 +33,7 @@ public class defaultHttpHandler {
      * Handles the HTTP connections.
      * @param connectionData The connection DTO.
      */
-    public static void dispatchRequest(connectionDto connectionData) {
+    public static void dispatchRequest(connectionDto connectionData, AuthDto user) {
 
         try {
             // Initialize IO and Sockets 
@@ -62,6 +64,10 @@ public class defaultHttpHandler {
                 // Send request
                 serverOut.write(request.toString());
                 serverOut.flush();
+
+                // Update user
+                user.setUpdatedAt(Instant.now().toEpochMilli());
+                user.setTx(request.toString().getBytes().length);
 
                 // Recv data 
                 String line = "";
@@ -95,6 +101,10 @@ public class defaultHttpHandler {
                 // Send data
                 clientOut.write(response.toString());
                 clientOut.flush();
+
+                // Update user
+                user.setUpdatedAt(Instant.now().toEpochMilli());
+                user.setRx(response.toString().getBytes().length);
 
                 if (!connectionData.isKeepAlive())
                     break;

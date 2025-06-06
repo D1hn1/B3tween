@@ -14,10 +14,8 @@ B3tween is a proxy capable of handeling http & https connections.
 - API module
 
 ### TODO NEXT:
-- Login endpoint ( SEE IT )
-- Logout endpoint
-- Web module (frontend)
-- URL blocker proxy from txt list
+- [ ] Web module (frontend)
+- [ ] URL blocker proxy from txt list
 
 - [X] Generate proxyTokens
 - [X] Asign to the user in the register a proxyToken 
