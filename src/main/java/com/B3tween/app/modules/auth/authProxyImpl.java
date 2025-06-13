@@ -14,7 +14,6 @@ public class authProxyImpl {
         if (globalRuntime.PROXY_AUTHENTICATION) {
             // parse headers
             for (headerDto header : request.getHeaders()) {
-
                 // get Authorization header
                 if (header.getKey().equals("Proxy-Authorization")) {
                     String authenticationType = header.getValue().split(" ")[0].trim();
@@ -31,8 +30,7 @@ public class authProxyImpl {
                     }
                     // Parse Bearer Auth
                     if (authenticationType.equalsIgnoreCase("Bearer")) {
-                        String proxyToken = authenticationCreds;
-                        if (authRepository.getUserByToken(proxyToken) != null) {
+                        if (authRepository.getUserByToken(authenticationCreds) != null) {
                             return true;
                         }
                     }

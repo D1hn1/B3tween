@@ -45,9 +45,6 @@ public class defaultHttpHandler {
             BufferedReader serverIn = forwardSocket.in;
             BufferedWriter clientOut = connectionData.getClientOut();
 
-            // Client socket timeout
-            connectionData.getClientSocket().setSoTimeout(5000);
-
             while (!connectionData.getClientSocket().isClosed()) {
                 // Get client request
                 requestDto request = connectionData.getRequest();
@@ -67,7 +64,7 @@ public class defaultHttpHandler {
 
                 // Update user
                 user.setUpdatedAt(Instant.now().toEpochMilli());
-                user.setTx(request.toString().getBytes().length);
+                user.setTx(user.getTx()+request.toString().getBytes().length);
 
                 // Recv data 
                 String line = "";
@@ -104,7 +101,7 @@ public class defaultHttpHandler {
 
                 // Update user
                 user.setUpdatedAt(Instant.now().toEpochMilli());
-                user.setRx(response.toString().getBytes().length);
+                user.setRx(user.getRx()+response.toString().getBytes().length);
 
                 if (!connectionData.isKeepAlive())
                     break;

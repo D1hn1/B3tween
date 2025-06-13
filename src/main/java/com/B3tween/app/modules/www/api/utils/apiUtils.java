@@ -129,9 +129,9 @@ public class apiUtils {
          * @param clientSocket The client socket
          * @param proxyToken The client proxy token
          */
-        public static void sendProxyToken(Socket clientSocket, String proxyToken, String origin) {
+        public static void sendProxyTokenAndUsername(Socket clientSocket, String proxyToken, String username, String origin) {
             try {
-                String data = "{\"proxyToken\":\""+proxyToken+"\"}";
+                String data = "{\"username\":\""+username+"\",\"proxyToken\":\""+proxyToken+"\"}";
                 BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 responseDto response = responseDto.builder()
                         .httpVersion("HTTP/1.1")
@@ -147,6 +147,61 @@ public class apiUtils {
                 clientOut.write(response.toString());
                 clientOut.flush();
             } catch (IOException io) {}
+        }
+
+        /**
+         * Sends the user RX & TX
+         * @param clientSocket The client socket
+         * @param Rx Recieved bytes
+         * @param Tx Transmited bytes
+         * @param origin The origin of the request
+         */
+        public static void sendRxTx(Socket clientSocket, int Rx, int Tx, String origin) {
+            try {
+                String data = "{\"rx\":\""+Rx+"\",\"tx\":\""+Tx+"\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(302)
+                    .reasonPhrase("Found")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(setCorsHeaders(origin));
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+            
+        }
+
+        /**
+         * Sends the amount of connections a user has
+         * @param clientSocket The client socket
+         * @param conns The number of connections
+         * @param origin The origin of the request
+         */
+        public static void sendConns(Socket clientSocket, int conns, String origin) {
+            try {
+                String data = "{\"connections\":\""+conns+"\"}";
+                BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                responseDto response = responseDto.builder()
+                    .httpVersion("HTTP/1.1")
+                    .statusCode(302)
+                    .reasonPhrase("Found")
+                    .headers(new ArrayList<>(
+                        List.of(headerDto.header("Content-Type", "application/json"),
+                                headerDto.header("Content-Length", ""+data.length()))
+                    ))
+                    .data(data)
+                    .build();
+                response.getHeaders().addAll(setCorsHeaders(origin));
+                clientOut.write(response.toString());
+                clientOut.flush();
+            } catch (IOException io) {}
+            
         }
 
         /**

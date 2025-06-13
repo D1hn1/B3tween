@@ -9,6 +9,7 @@ import com.B3tween.app.objects.global.globalRuntime;
 
 import java.io.*;
 import java.net.*;
+import java.time.Instant;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.exception.bException;
@@ -16,31 +17,70 @@ import com.B3tween.app.modules.exception.bException;
 public class defaultHttpsHandler {
     
     /**
+     * Deletes a connection by the user ID
+     * @param userId The user ID
+     */
+    private static void deleteConnectionDto(int userId) {
+        globalRuntime.connectionList.removeIf(conn -> 
+            conn.getUserId() == userId
+        );
+    }
+
+    /**
      * Relay bytes between client and server.
      * @param in Read Socket 
      * @param out Write Socket
      * @param clientSocket Client Socket
      */
-    private static void relayBytes(InputStream in, OutputStream out, Socket clientSocket, AuthDto user) {
+    private static void relayBytesClientServer(InputStream in, OutputStream out, Socket clientSocket, AuthDto user) {
         globalRuntime.threadPool.submit(() -> {
             try {
-                // User data
-                int totalData = 0;
                 // Recv data & send it
-                int bytesRead = 0;
+                int bytesRead, totalData = 0;
                 byte[] buffer = new byte[8192];
                 while ((bytesRead = in.read(buffer)) != -1) {
                     totalData+=bytesRead;
                     out.write(buffer, 0, bytesRead);
                 }
                 out.flush();
-                // TODO: Update user with @totalData
                 // Close socket
                 clientSocket.close();
+                // Delete connection DTO
+                deleteConnectionDto(user.getId());
+                // Update user
+                user.setTx(user.getTx()+totalData);
+                user.setUpdatedAt(Instant.now().toEpochMilli());
             } catch (IOException io) {}
         });
     }
 
+    /**
+     * Relay bytes between server and client.
+     * @param in Read Socket
+     * @param out Write Socket
+     * @param clientSocket Client Socket
+     */
+    private static void relayBytesServerClient(InputStream in, OutputStream out, Socket clientSocket, AuthDto user) {
+        globalRuntime.threadPool.submit(() -> {
+            try {
+                // Recv data & send it
+                int bytesRead, totalData = 0;
+                byte[] buffer = new byte[8192];
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    totalData+=bytesRead;
+                    out.write(buffer, 0, bytesRead);
+                }
+                out.flush();
+                // Close socket
+                clientSocket.close();
+                // Delete connection DTO
+                deleteConnectionDto(user.getId());
+                // Update user
+                user.setRx(user.getRx()+totalData);
+                user.setUpdatedAt(Instant.now().toEpochMilli());
+            } catch (IOException io) {}
+        });
+    }
     /**
      * Handle the proxy https connection.
      * @param connectionData The connection DTO.
@@ -54,12 +94,9 @@ public class defaultHttpsHandler {
                 ""+connectionData.getClientSocket().getRemoteSocketAddress());
 
             InputStream serverIn = forwardSocket.socket.getInputStream();
-            OutputStream serverOutBytes = forwardSocket.socket.getOutputStream();
+            OutputStream serverOut = forwardSocket.socket.getOutputStream();
             InputStream clientIn = connectionData.getClientSocket().getInputStream();
-            OutputStream clientOutBytes = connectionData.getClientSocket().getOutputStream();
-
-            // Client socket timeout
-            connectionData.getClientSocket().setSoTimeout(5000);
+            OutputStream clientOut = connectionData.getClientSocket().getOutputStream();
 
             requestDto request = connectionData.getRequest();
             if (request == null) {
@@ -70,8 +107,8 @@ public class defaultHttpsHandler {
             proxyUtils.responses.connectionEstablished(connectionData.getClientSocket());
 
             // Transmit data
-            relayBytes(clientIn, serverOutBytes, connectionData.getClientSocket(), user);
-            relayBytes(serverIn, clientOutBytes, connectionData.getClientSocket(), user);
+            relayBytesClientServer(clientIn, serverOut, connectionData.getClientSocket(), user);
+            relayBytesServerClient(serverIn, clientOut, connectionData.getClientSocket(), user);
 
         } catch (IOException io)
         {} catch (bException e) {

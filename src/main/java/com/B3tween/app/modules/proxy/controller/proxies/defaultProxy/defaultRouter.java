@@ -2,7 +2,6 @@ package com.B3tween.app.modules.proxy.controller.proxies.defaultProxy;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.proxy.controller.dto.connectionDto;
-import com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.defaultRouter;
 import com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.controller.defaultHttpHandler;
 import com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.controller.defaultHttpsHandler;
 import com.B3tween.app.objects.dto.requestDto;

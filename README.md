@@ -21,8 +21,13 @@ B3tween is a proxy capable of handeling http & https connections.
 - [X] Asign to the user in the register a proxyToken 
 - [X] Implementation with frontend endpooint getproxytoken
 - [X] Asign in the browser a value to retrieve the proxyToken from the userdto
-- [ ] Add the validation into the proxy
-- [ ] Get the userdto in the proxy controller with the proxyToken
+- [X] Add the validation into the proxy
+- [X] Get the userdto in the proxy controller with the proxyToken
 
 - [X] Validate user name from jwt
 - [X] Try to make CORS dynamic
+- [ ] Make an already auth proxy list to faster log in the user
+- [ ] Make admin pannel
+    - Create admin user
+    - Add admin authentication
+    - Create different routes

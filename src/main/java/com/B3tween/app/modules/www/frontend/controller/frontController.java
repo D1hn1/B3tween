@@ -73,12 +73,17 @@ public class frontController {
                 
                 case "/dashboard":
                     if (request.getMethod().equals(Method.GET)) {
-                        // Validate JWT
-                        if (jwtRepository.validateJWT(request)) {
-                            webUtils.responseFound(writer, "/html/dashboard.html");
+                        if (jwtRepository.isUserAdministrator(request)) {
+                            // Admin pannel
+                            webUtils.responseFound(writer, "/html/admin-dashboard.html");
                         } else {
-                            // JWT Not valid
-                            webUtils.forbiddenAuth(writer, "/errors/403.html");
+                            // Validate JWT
+                            if (jwtRepository.validateJWT(request)) {
+                                webUtils.responseFound(writer, "/html/dashboard.html");
+                            } else {
+                                // JWT Not valid
+                                webUtils.forbiddenAuth(writer, "/errors/403.html");
+                            }
                         }
                     } else {
                         // Send method not allowed

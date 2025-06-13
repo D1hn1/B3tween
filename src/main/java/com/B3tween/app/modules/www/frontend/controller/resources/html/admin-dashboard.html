@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="css/nav.css">
+        <link rel="stylesheet" href="css/admin-dashboard.css">
+        <title>B3tween | Admin</title>
+    </head>
+    <body>
+        <!-- NAV -->
+        <nav id="nav">
+            <h3 id="username-holder"></h3>
+            <h5 id="site-holder">Admin dashboard</h5>
+            <section>
+                <button id="logout-button">Logout</button>
+            </section>
+        </nav>
+        <!-- ADMIN DASHBOARD -->
+         <div id="container">
+            <section id="page-navegator">
+                    <label for="menu-user-stats" onclick="swapper('menu-user-stats', 'main-section-user-stats')">User stats</label>
+                    <input type="radio" name="menu" id="menu-user-stats">
+                    <label for="menu-global-stats" onclick="swapper('menu-global-stats', 'main-section-global-stats')">Global stats</label>
+                    <input type="radio" name="menu" id="menu-global-stats">
+                    <label for="menu-configuration" onclick="swapper('menu-configuration', 'main-section-configuration')">Configuration</label>
+                    <input type="radio" name="menu" id="menu-configuration">
+            </section>
+            <section id="main-section">
+                <section id="main-section-user-stats">
+                    <h1>user stats</h1>
+                </section>
+                <section id="main-section-global-stats">
+                    <h1>global stats</h1>
+                </section>
+                <section id="main-section-configuration">
+                    <h1>configuration</h1>
+                </section>
+            </section>
+         </div>
+        <script src="js/global.js"></script>
+        <script src="js/logout.js"></script>
+        <script src="js/menu-swap.js"></script>
+    </body>
+</html>

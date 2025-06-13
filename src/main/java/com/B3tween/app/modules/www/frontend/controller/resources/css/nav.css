@@ -1,32 +1,38 @@
+:root {
+    --corner: 190px;
+}
+
 /* NAV */
 
 #nav {
-    width: 100%;
-    height: 40px;
-
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: end;
-    padding-right: 20px;
+    justify-content: center;
     border-bottom: 1px solid black;
-
     font-size: 1rem;
 }
 
 #nav section {
-    width: 180px;
+    position: absolute;
+    width: var(--corner);
+    height: 100%;
+    border-left: 1px solid black;
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    right: 10px;
 }
 
 #nav section a {
-    text-decoration: none;
     border: 0;
     color: black;
     cursor: pointer;
+    text-decoration: none;
 }
 
 #nav section button {
@@ -45,4 +51,32 @@
 }
 #nav section button:hover {
     color: blue;
+}
+
+/* Site holder */
+
+#site-holder {
+    height: 100%;
+    font-size: 1rem;
+    font-weight: 100;
+
+    display: grid;
+    place-items: center;
+}
+
+/* Username holder */
+
+#username-holder {
+    width: var(--corner);
+    height: 100%;
+    position: absolute;
+    left: 10px;
+
+    font-size: 1rem;
+    font-weight: 100;
+
+    display: grid;
+    place-items: center;
+
+    border-right: 1px solid black;
 }

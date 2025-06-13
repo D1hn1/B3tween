@@ -1,9 +1,34 @@
 package com.B3tween.app.modules.auth.repository;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
+import com.B3tween.app.modules.log.Log;
+import com.B3tween.app.modules.proxy.token.ProxyToken;
+import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.objects.global.globalRuntime;
 
+import java.time.Instant;
+
 public class authRepository {
+
+    /* Create Admin User */
+    public static void createAdminUser() {
+        // Get admin proxy token
+        String adminToken = ProxyToken.generate();
+        // Admin DTO
+        AuthDto adminUser = AuthDto.builder()
+                .id(apiUtils.getNextUserId())
+                .createdAt(Instant.now().toEpochMilli())
+                .updatedAt(Instant.now().toEpochMilli())
+                .username(globalRuntime.ADMIN_USERNAME)
+                .password(globalRuntime.ADMIN_PASSWORD)
+                .proxyToken(adminToken)
+                .build();
+        // Save user
+        save(adminUser);
+        Log.l(String.format("Default admin account created - %s / %s",
+                adminUser.getUsername(),
+                adminUser.getPassword()));
+    }
 
     /**
      * Checks if an user can Register.

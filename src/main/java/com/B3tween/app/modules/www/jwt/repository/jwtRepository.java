@@ -1,6 +1,8 @@
 package com.B3tween.app.modules.www.jwt.repository;
 
 import java.util.Base64;
+
+import com.B3tween.app.objects.global.globalRuntime;
 import org.json.JSONObject;
 import com.B3tween.app.modules.www.jwt.dto.JwtDto;
 import com.B3tween.app.objects.dto.headerDto;
@@ -8,7 +10,24 @@ import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class jwtRepository {
- 
+
+    public static boolean isUserAdministrator(requestDto request) {
+        for (headerDto header : request.getHeaders()) {
+            if (header.getKey().equalsIgnoreCase("cookie")) {
+                // Parse JWT
+                String rawPay = header.getValue().split("=")[1].split("\\.")[1].trim();
+                // Decode header && payload
+                String decodedPay = new String(Base64.getDecoder().decode(rawPay));
+                // Validate user
+                JSONObject json = new JSONObject(decodedPay);
+                if (json.getString("username").equals(globalRuntime.ADMIN_USERNAME)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Validates a JWT
      * @param request The request containing the Cookie

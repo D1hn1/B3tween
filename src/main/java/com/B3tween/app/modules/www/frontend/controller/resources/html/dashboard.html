@@ -4,18 +4,41 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/nav.css">
-        <title>B3tween dashboard</title>
+        <link rel="stylesheet" href="css/dashboard.css">
+        <title>B3tween | Dashboard</title>
     </head>
     <body>
         <!-- NAV -->
         <nav id="nav">
+            <h3 id="username-holder"></h3>
+            <h5 id="site-holder">Dashboard</h5>
             <section>
                 <button id="logout-button">Logout</button>
             </section>
         </nav>
-        <h1>Dashboard</h1>
-        <h1>Proxy Token</h1>
-        <p id="proxyToken"></p>
+        <!-- DASHBOARD -->
+        <table id="main-table">
+            <tr>
+                <td>User ID</td>
+                <td id="uidField"></td>
+            </tr>
+            <tr>
+                <td>Proxy token</td>
+                <td id="proxyToken"></td>
+            </tr>
+            <tr>
+                <td>Bytes Recieved</td>
+                <td id="rxField"></td>
+            </tr>
+            <tr>
+                <td>Bytes Transmited</td>
+                <td id="txField"></td>
+            </tr>
+            <tr>
+                <td>Number of connections</td>
+                <td id="connField"></td>
+            </tr>
+        </table>
         <script src="js/dashboard.js"></script>
         <script src="js/global.js"></script>
         <script src="js/logout.js"></script>

@@ -1,6 +1,8 @@
 package com.B3tween.app.modules.www.api.controller.routes;
 
-import java.net.Socket;
+import java.net.*;
+
+import org.json.JSONObject;
 
 import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.auth.repository.authRepository;
@@ -9,12 +11,11 @@ import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.modules.www.jwt.repository.jwtRepository;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.enums.Method;
-import org.json.JSONObject;
 
-public class apiGetToken {
+public class apiGetRxTx {
 
     /**
-     * Get token endpoint
+     * Get Rx and Tx from user
      * @param request User request
      * @param clientSocket The client socket
      */
@@ -39,12 +40,12 @@ public class apiGetToken {
                         Log.e("[API] (getUserById) user not found id=" + userId);
                         return;
                     }
-                    // Send user token
-                    apiUtils.responses.sendProxyTokenAndUsername(
-                            clientSocket,
-                            user.getProxyToken(),
-                            user.getUsername(),
-                            origin
+                    // Send Rx&Tx
+                    apiUtils.responses.sendRxTx(
+                        clientSocket,
+                        user.getRx(),
+                        user.getTx(),
+                        origin
                     );
                 } catch (NumberFormatException nfe) {
                     Log.e(nfe.getMessage());

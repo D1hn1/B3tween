@@ -5,6 +5,8 @@ import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.dto.requestDto;
+import com.B3tween.app.modules.www.api.controller.routes.apiGetConns;
+import com.B3tween.app.modules.www.api.controller.routes.apiGetRxTx;
 import com.B3tween.app.modules.www.api.controller.routes.apiGetToken;
 import com.B3tween.app.modules.www.api.controller.routes.apiLogin;
 import com.B3tween.app.modules.www.api.controller.routes.apiRegister;
@@ -63,6 +65,23 @@ public class apiController {
                  */
                 case "/get-token":
                     apiGetToken.h(request, clientSocket, origin);
+                    break;
+
+                /**
+                 *  POST /get-rxtx
+                 *  Expected JSON body
+                 *  - uid: String (UserId)
+                 */
+                case "/get-rxtx":
+                    apiGetRxTx.h(request, clientSocket, origin);
+                    break;
+
+                /**
+                 *  POST /get-conns
+                 *  Expected JSON body 
+                 */
+                case "/get-conns":
+                    apiGetConns.h(request, clientSocket, origin);
                     break;
                 
                 default:
