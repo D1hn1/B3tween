@@ -30,6 +30,18 @@ public class authRepository {
                 adminUser.getPassword()));
     }
 
+    /* Create anonymous User */
+    public static void createAnonymousUser() {
+        // Anonymous DTO
+        AuthDto anonUser = AuthDto.builder()
+                .id(-1)
+                .username("anonymous")
+                .password("")
+                .build();
+        // Save user
+        save(anonUser);
+    }
+
     /**
      * Checks if an user can Register.
      * @param username String username.

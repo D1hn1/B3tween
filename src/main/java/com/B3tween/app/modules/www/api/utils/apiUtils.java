@@ -74,6 +74,33 @@ public class apiUtils {
         } catch (IOException io) {}
     }
 
+    /**
+     * Sends a value with a 302 found
+     * @param clientSocket The client socket
+     * @param value The value to send
+     * @param origin The origin of the request
+     */
+    public static void sendSingleValue(Socket clientSocket, String value, String origin) {
+        try {
+            String data = "{\"value\":\""+value+"\"}";
+            BufferedWriter clientOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            responseDto response = responseDto.builder()
+                .httpVersion("HTTP/1.1")
+                .statusCode(302)
+                .reasonPhrase("Found")
+                .headers(new ArrayList<>(
+                    List.of(headerDto.header("Content-Type", "application/json"),
+                            headerDto.header("Content-Length", ""+data.length()))
+                ))
+                .data(data)
+                .build();
+            response.getHeaders().addAll(setCorsHeaders(origin));
+            clientOut.write(response.toString());
+            clientOut.flush();
+        } catch (IOException io) {}
+        
+    }
+
     public static class responses {
 
         /**

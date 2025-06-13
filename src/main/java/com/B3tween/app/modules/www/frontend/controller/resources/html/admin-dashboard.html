@@ -21,25 +21,72 @@
         <!-- ADMIN DASHBOARD -->
          <div id="container">
             <section id="page-navegator">
-                    <label for="menu-user-stats" onclick="swapper('menu-user-stats', 'main-section-user-stats')">User stats</label>
-                    <input type="radio" name="menu" id="menu-user-stats">
-                    <label for="menu-global-stats" onclick="swapper('menu-global-stats', 'main-section-global-stats')">Global stats</label>
+                    <label for="menu-user-stats" onclick="swapper('menu-user-stats')">User stats</label>
+                    <input type="radio" name="menu" id="menu-user-stats" checked>
+                    <label for="menu-global-stats" onclick="swapper('menu-global-stats')">Global stats</label>
                     <input type="radio" name="menu" id="menu-global-stats">
-                    <label for="menu-configuration" onclick="swapper('menu-configuration', 'main-section-configuration')">Configuration</label>
+                    <label for="menu-configuration" onclick="swapper('menu-configuration')">Configuration</label>
                     <input type="radio" name="menu" id="menu-configuration">
             </section>
             <section id="main-section">
                 <section id="main-section-user-stats">
-                    <h1>user stats</h1>
+                    <table id="main-table">
+                        <tr>
+                            <td>User ID</td>
+                            <td id="uidField"></td>
+                        </tr>
+                        <tr>
+                            <td>Proxy token</td>
+                            <td id="proxyToken"></td>
+                        </tr>
+                        <tr>
+                            <td>Bytes Recieved</td>
+                            <td id="rxField"></td>
+                        </tr>
+                        <tr>
+                            <td>Bytes Transmited</td>
+                            <td id="txField"></td>
+                        </tr>
+                        <tr>
+                            <td>Number of connections</td>
+                            <td id="connField"></td>
+                        </tr>
+                    </table>
                 </section>
                 <section id="main-section-global-stats">
-                    <h1>global stats</h1>
+                    <table id="second-table">
+                        <tr>
+                            <td>Total Users</td>
+                            <td id="totalUsersField"></td>
+                        </tr>
+                        <tr>
+                            <td>Total Connections</td>
+                            <td id="totalConnsField"></td>
+                        </tr>
+                    </table>
                 </section>
                 <section id="main-section-configuration">
-                    <h1>configuration</h1>
+                    <h2>Proxy type</h2>
+                    <div id="main-section-configuration-proxy-type">
+                        <input type="radio" name="proxy-conf" id="proxy-type-1">
+                        <label for="proxy-type-1">Default proxy</label>
+                        <input type="radio" name="proxy-conf" id="proxy-type-2">
+                        <label for="proxy-type-2">Other proxy</label>
+                        <input type="submit" id="proxy-type-submit" value="Save">
+                    </div>
+                    <h2>Proxy authentication</h2>
+                    <div id="main-section-configuration-proxy-auth">
+                        <input type="radio" name="proxy-auth" id="proxy-auth-enable">
+                        <label for="proxy-auth-enable">Enable</label>
+                        <input type="radio" name="proxy-auth" id="proxy-auth-disable">
+                        <label for="proxy-auth-disable">Disable</label>
+                        <input type="submit" id="proxy-auth-submit" value="Save">
+                    </div>
                 </section>
             </section>
-         </div>
+        </div>
+        <script src="js/admin-dashboard.js"></script>
+        <script src="js/dashboard.js"></script>
         <script src="js/global.js"></script>
         <script src="js/logout.js"></script>
         <script src="js/menu-swap.js"></script>

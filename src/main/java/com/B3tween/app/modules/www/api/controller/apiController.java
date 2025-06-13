@@ -8,8 +8,12 @@ import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.www.api.controller.routes.apiGetConns;
 import com.B3tween.app.modules.www.api.controller.routes.apiGetRxTx;
 import com.B3tween.app.modules.www.api.controller.routes.apiGetToken;
+import com.B3tween.app.modules.www.api.controller.routes.apiGetTotalConns;
+import com.B3tween.app.modules.www.api.controller.routes.apiGetTotalUsers;
 import com.B3tween.app.modules.www.api.controller.routes.apiLogin;
 import com.B3tween.app.modules.www.api.controller.routes.apiRegister;
+import com.B3tween.app.modules.www.api.controller.routes.apiSetProxyAuth;
+import com.B3tween.app.modules.www.api.controller.routes.apiSetProxyType;
 import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 
@@ -79,11 +83,54 @@ public class apiController {
                 /**
                  *  POST /get-conns
                  *  Expected JSON body 
+                 *   - uid: String (UserId)
                  */
                 case "/get-conns":
                     apiGetConns.h(request, clientSocket, origin);
                     break;
                 
+                /*****************
+                 * ADMIN ENDPOINTS
+                 *****************/
+
+                /**
+                 *  POST /get-total-users
+                 *  Expected JSON body
+                 *   - uid: String (UserId)
+                 */
+                case "/get-total-users":
+                    apiGetTotalUsers.h(request, clientSocket, origin);
+                    break;
+
+                /**
+                 *  POST /get-total-conns
+                 *  Expected JSON body
+                 *   - uid: String (UserId)
+                 */
+                case "/get-total-conns":
+                    apiGetTotalConns.h(request, clientSocket, origin);
+                    break;
+
+                /**
+                 *  POST /set-proxy-type
+                 *  Expected JSON body
+                 *   - uid: String (UserId)
+                 *   - type: String (ProxyType)
+                 */
+                case "/set-proxy-type":
+                    apiSetProxyType.h(request, clientSocket, origin);
+                    break;
+                
+                /**
+                 *  POST /set-proxy-auth
+                 *  Expected JSON body
+                 *   - uid: String (UserId)
+                 *   - state: String (Boolean)
+                 */
+                case "/set-proxy-auth":
+                    apiSetProxyAuth.h(request, clientSocket, origin);
+                    break;
+
                 default:
                     apiUtils.responses.resourceNotFound(clientSocket, origin);
                     break;

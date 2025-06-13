@@ -1,24 +1,18 @@
 // Get buttons
 const buttons = ["menu-user-stats","menu-global-stats","menu-configuration"];
 // Get pages
-const pages = ["main-section-user-stats", "main-section-global-stats", "main-section-configuration"];
+const pages = ["main-section-user-stats","main-section-global-stats","main-section-configuration"];
 // Swapper
-function swapper(buttonId, pageToSwap) {
-    // Get button pressed
-    const pressedButton = document.getElementById(buttonId);
-    // Get page selected
-    const presentPage = document.getElementById(pageToSwap);
-    // Loop 
-    buttons.forEach(button => {
-        pages.forEach(page => {
-            // Get actual button
-            const actualButton = document.getElementById(button);
-            const actualPage = document.getElementById(page)
-            if (actualButton === pressedButton && actualPage === presentPage) {
-                presentPage.style.display="inline";
-            } else {
-                actualPage.style.display="none";
-            }
-        })
-    });
+function swapper(buttonId) {
+    for (let i = 0; i < buttons.length; i++) {
+        const label = document.querySelector(`label[for="${buttons[i]}"]`);
+        const page = document.getElementById(pages[i]);
+        if (buttons[i] === buttonId) {
+            label.style.backgroundColor = "rgba(0,0,0,0.1)";
+            page.style.display = "grid";
+        } else {
+            label.style.backgroundColor = "white";
+            page.style.display = "none";
+        }
+    }
 }

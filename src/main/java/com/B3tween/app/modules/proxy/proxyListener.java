@@ -24,6 +24,8 @@ public class proxyListener {
 
         // Create Admin user
         authRepository.createAdminUser();
+        // Create anonymous user
+        authRepository.createAnonymousUser();
 
         // Shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

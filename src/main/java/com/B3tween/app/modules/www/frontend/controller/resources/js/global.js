@@ -4,3 +4,4 @@ const loginError = "Login failed";
 const registerError = "Register failed";
 const registerErrorPasswordsDoNotMatch = "Passwords do not match";
 const cookieName = "b3cookie";
+const intervals = [];

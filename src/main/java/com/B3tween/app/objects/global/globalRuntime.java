@@ -42,7 +42,7 @@ public class globalRuntime {
     public static String JWTSecret = "secret-word";
 
     // Proxy token length
-    public static int proxyTokenLength = 48;
+    public static int proxyTokenLength = 32;
 
     // Proxy selection
     public static ProxyType proxyType = ProxyType.FORWARD;

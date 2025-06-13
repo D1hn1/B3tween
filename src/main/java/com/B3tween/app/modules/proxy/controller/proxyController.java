@@ -11,6 +11,7 @@ import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.modules.auth.authProxyImpl;
 import com.B3tween.app.modules.auth.dto.AuthDto;
+import com.B3tween.app.modules.auth.repository.authRepository;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class proxyController {
@@ -23,7 +24,8 @@ public class proxyController {
 
         // Get client request
         requestDto request = proxyUtils.getRequest(clientSocket);
-
+        // Declarate user
+        AuthDto user = authRepository.getUser("anonymous");
         // Validate proxy authentication
         if (globalRuntime.PROXY_AUTHENTICATION) {
             if (!authProxyImpl.validateLogin(request)) {
@@ -31,14 +33,12 @@ public class proxyController {
                 Log.e("[PROXY] Client: " + clientSocket.getRemoteSocketAddress() + " failed authentication");
                 return;
             }
-            //Log.i("Client: " + clientSocket.getRemoteSocketAddress() + " authenticated");
-        }
-
-        // Get AUTHDTO
-        AuthDto user = proxyUtils.getAuthDtoFromRequest(request);
-        if (user == null) {
-            proxyUtils.responses.proxyAuthenticationRequired(clientSocket);
-            return;
+            // Get AUTHDTO
+            user = proxyUtils.getAuthDtoFromRequest(request);
+            if (user == null) {
+                proxyUtils.responses.proxyAuthenticationRequired(clientSocket);
+                return;
+            }
         }
 
         // Get user I/O
@@ -62,7 +62,7 @@ public class proxyController {
         // Connection DTO
         connectionDto connectionData = connectionDto.builder()
             .id(proxyUtils.getNextId())
-            .userId(user.getId())
+            .userId(user == null ? user.getId() : -1)
             .request(request)
             .clientSocket(clientSocket)
             .clientIn(clientIn)
