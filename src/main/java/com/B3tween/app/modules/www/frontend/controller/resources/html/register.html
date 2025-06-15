@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/nav.css">
+        <link rel="stylesheet" href="css/register.css">
+        <title>B3tween | Register</title>
+    </head>
+    <body>
+        <!-- NAV -->
+        <nav id="nav">
+            <section>
+                <a href="/">Login</a>
+                <a href="#">Register</a>
+            </section>
+        </nav>
+        <!-- FORM -->
+        <h1>B3Register</h1>
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" required>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required>
+            <label for="confirm-password">Confirm Password</label>
+            <input id="confirm-password" name="confirm_password" type="password" required>
+            <p id="statusResponse"></p>
+            <input type="submit" value="Send">
+        </form>
+        <!-- JS -->
+        <script src="js/register.js"></script>
+        <script src="js/global.js"></script>
+    </body>
+</html>

@@ -1,28 +1,28 @@
-package com.B3tween.app.modules.www.api;
+package com.B3tween.app.modules.www.frontend;
 
 import java.io.*;
 import java.net.*;
 
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.www.api.controller.apiController;
+import com.B3tween.app.modules.www.frontend.controller.frontController;
 import com.B3tween.app.objects.global.globalRuntime;
 
-public class apiListener {
+public class frontListener {
 
     /**
-     * Listen for api requests
+     * Listens for front web connections
      * @param port The port to listen on
      * @throws IOException If an error occurs while accepting clients
      */
-    public apiListener(int port) throws IOException {
+    public frontListener(int port) throws IOException {
         // Initialize socket
-        ServerSocket socket = new ServerSocket(port);
-        Log.i("[API] listener started on port " + port);
+        ServerSocket socket =  new ServerSocket(port);
+        Log.i("[WEB] listener started on port " + port);
 
         while (globalRuntime.RUNNING) {
             // Accept clients
             Socket clientSocket = socket.accept();
-            globalRuntime.threadPool.submit(() -> apiController.Handle(clientSocket));
+            globalRuntime.threadPool.submit(() -> frontController.Handle(clientSocket));
         }
 
         // Close socket

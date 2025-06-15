@@ -15,9 +15,12 @@ public class AuthDto {
     private Long createdAt;
     private Long updatedAt;
 
-    private boolean isLoggedIn;
-
     private String username;
     private String password;
+
+    private String proxyToken;
+
+    private int rx;
+    private int tx;
 
 }

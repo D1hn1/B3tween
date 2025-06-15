@@ -19,7 +19,7 @@ public class Log {
     public static void e(String message) {
         System.err.println(time + " " + Thread.activeCount() +
             RED + " ERROR    " + END + "-- " +
-            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            "[" + Thread.currentThread().getName().toUpperCase() + "] " + "-- " +
             message);
     }
 
@@ -30,7 +30,7 @@ public class Log {
     public static void l(String message) {
         System.out.println(time + " " + Thread.activeCount() +
             GREEN + " LOG      " + END + "-- " +
-            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            "[" + Thread.currentThread().getName().toUpperCase() + "] " + "-- " +
             message);
     }
 
@@ -41,7 +41,7 @@ public class Log {
     public static void c(String message) {
         System.err.println(time + " " + Thread.activeCount() +
             RED + " " + SUBLINE + "CRITICAL" + END + " " + "-- " +
-            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            "[" + Thread.currentThread().getName().toUpperCase() + "] " + "-- " +
             message);
     }
 
@@ -52,7 +52,7 @@ public class Log {
     public static void i(String message) {
         System.out.println(time + " " + Thread.activeCount() +
             BLUE + " INFO     " + END + "-- " + 
-            "[" + Thread.currentThread().getName() + "] " + "-- " +
+            "[" + Thread.currentThread().getName().toUpperCase() + "] " + "-- " +
             message);
     }
 }

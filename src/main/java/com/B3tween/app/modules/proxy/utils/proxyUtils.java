@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Base64;
 import java.util.List;
 
+import com.B3tween.app.modules.auth.dto.AuthDto;
+import com.B3tween.app.modules.auth.repository.authRepository;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.dto.headerDto;
@@ -16,6 +19,41 @@ import com.B3tween.app.objects.dto.responseDto;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class proxyUtils {
+
+    /**
+     * Retrieves the AuthDto from a request
+     * @param request The user request
+     * @return Null if the user is not found ||
+     *         the AuthDto user if its found
+     */
+    public static AuthDto getAuthDtoFromRequest(requestDto request) {
+        // Loop through request headers
+        for (headerDto header : request.getHeaders()) {
+            // Get authentication header
+            if (header.getKey().equalsIgnoreCase("Proxy-Authorization")) {
+                String authenticationType = header.getValue().split(" ")[0].trim();
+                String authenticationCreds = header.getValue().split(" ")[1].trim();
+                // Parse Basic auth
+                if (authenticationType.equalsIgnoreCase("Basic")) {
+                    byte[] credsDecBase64 = Base64.getDecoder().decode(authenticationCreds);
+                    String proxyCredentials = new String(credsDecBase64);
+                    String username = proxyCredentials.toString().split(":")[0].trim(); // TRIM THEM
+                    if (!username.isEmpty()) {
+                        return authRepository.getUser(username);
+                    }
+                }
+                // Parse Bearer auth
+                if (authenticationType.equalsIgnoreCase("Bearer")) {
+                    String proxyToken = authenticationCreds;
+                    if (proxyToken != null) {
+                        return authRepository.getUserByToken(proxyToken);
+                    }
+                }
+            }
+        }
+        // Return null if no user is found
+        return null;
+    }
 
     /**
      * Generate next id for the Connection DTO.
@@ -65,11 +103,11 @@ public class proxyUtils {
             return requestDto.parseRequest(request.toString());
 
         } catch (IOException io) {
-            Log.e("[PROXY] Error while getting user input" + io);
+            Log.e("[PROXY] Error while getting user input " + io);
             return null;
 
         } catch (bException be) {
-            Log.e("[PROXY]" + be.getMessage());
+            Log.e("[PROXY] " + be.getMessage());
             return null;
 
         }

@@ -3,8 +3,9 @@ package com.B3tween.app.modules.proxy;
 import java.io.*;
 import java.net.*;
 
+import com.B3tween.app.modules.auth.repository.authRepository;
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.proxy.connection.proxyConnectionHandler;
+import com.B3tween.app.modules.proxy.controller.proxyController;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.global.globalRuntime;
 
@@ -20,6 +21,11 @@ public class proxyListener {
         // Initialize server socket
         ServerSocket serverSocket = new ServerSocket(port);
         Log.i("[PROXY] listener started on port " + port);
+
+        // Create Admin user
+        authRepository.createAdminUser();
+        // Create anonymous user
+        authRepository.createAnonymousUser();
 
         // Shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -40,7 +46,7 @@ public class proxyListener {
 
             // Accept clients
             Socket clientSocket = serverSocket.accept();
-            globalRuntime.threadPool.submit(() -> proxyConnectionHandler.Handler(clientSocket));
+            globalRuntime.threadPool.submit(() -> proxyController.Handler(clientSocket));
 
         }
     }
