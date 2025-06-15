@@ -11,6 +11,12 @@ import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class jwtRepository {
 
+    /**
+     * Checks if user is Administrator
+     * @param request The user request
+     * @return True if user is Administrator
+     *         False otherwise
+     */
     public static boolean isUserAdministrator(requestDto request) {
         for (headerDto header : request.getHeaders()) {
             if (header.getKey().equalsIgnoreCase("cookie")) {

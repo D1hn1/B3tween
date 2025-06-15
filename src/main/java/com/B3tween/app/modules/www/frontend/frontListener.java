@@ -8,7 +8,12 @@ import com.B3tween.app.modules.www.frontend.controller.frontController;
 import com.B3tween.app.objects.global.globalRuntime;
 
 public class frontListener {
-    
+
+    /**
+     * Listens for front web connections
+     * @param port The port to listen on
+     * @throws IOException If an error occurs while accepting clients
+     */
     public frontListener(int port) throws IOException {
         // Initialize socket
         ServerSocket socket =  new ServerSocket(port);

@@ -74,7 +74,7 @@ public class proxyController {
         // Parse ProxyType 
         switch (globalRuntime.proxyType) {
             case FORWARD:
-                defaultRouter.methodParser(connectionData, request, user);
+                defaultRouter.methodParser(connectionData, user);
                 break;
         
             default:

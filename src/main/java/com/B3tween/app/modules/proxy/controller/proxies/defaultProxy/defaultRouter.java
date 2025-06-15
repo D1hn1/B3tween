@@ -8,8 +8,13 @@ import com.B3tween.app.objects.dto.requestDto;
 
 public class defaultRouter {
 
-    public static void methodParser(connectionDto connectionData, requestDto request, AuthDto user) {
-        switch (request.getMethod()) {
+    /**
+     * Parsers HTTP and HTTPS connections
+     * @param connectionData The connection DTO
+     * @param user The user DTO
+     */
+    public static void methodParser(connectionDto connectionData, AuthDto user) {
+        switch (connectionData.getRequest().getMethod()) {
             case CONNECT:
                 defaultHttpsHandler.dispatchRequest(connectionData, user);
                 break;

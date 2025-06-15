@@ -8,7 +8,12 @@ import com.B3tween.app.objects.global.globalRuntime;
 import com.B3tween.app.modules.auth.repository.authRepository;
 
 public class authProxyImpl {
-    
+
+    /**
+     * Validates an user in the proxy module
+     * @param request The user requests
+     * @return True if user exists False otherwhise
+     */
     public static Boolean validateLogin(requestDto request) {
         // check authentication enable
         if (globalRuntime.PROXY_AUTHENTICATION) {

@@ -12,6 +12,10 @@ import com.B3tween.app.objects.enums.Method;
 
 public class frontController {
 
+    /**
+     * Handlers the front web requests
+     * @param clientSocket The client Socket
+     */
     public static void Handle(Socket clientSocket) {
 
         try {

@@ -18,7 +18,11 @@ import com.B3tween.app.modules.www.api.utils.apiUtils;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 
 public class apiController {
-    
+
+    /**
+     * Handlers the connection of the user
+     * @param clientSocket The client Socket
+     */
     public static void Handle(Socket clientSocket) {
 
         try {

@@ -9,6 +9,11 @@ import com.B3tween.app.objects.global.globalRuntime;
 
 public class apiListener {
 
+    /**
+     * Listen for api requests
+     * @param port The port to listen on
+     * @throws IOException If an error occurs while accepting clients
+     */
     public apiListener(int port) throws IOException {
         // Initialize socket
         ServerSocket socket = new ServerSocket(port);
