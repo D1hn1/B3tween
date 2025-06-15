@@ -3,53 +3,56 @@ package com.B3tween.app.modules.www.frontend.utils;
 import java.io.*;
 import java.util.*;
 import java.net.Socket;
-import java.nio.file.Files;
 import com.B3tween.app.modules.log.Log;
+import java.nio.charset.StandardCharsets;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.responseDto;
 
 public class webUtils {
  
-    // Static resource path
-    private static String staticPath = "src/main/java/com/B3tween/app/modules/www/frontend/controller/resources";
-
     /**
      * Check if file exists
      * @param rawFile Filename
      * @return True if file exists, false otherwise
      */
     public static boolean doFileExists(String rawFile) {
-        // Get file handler
-        File file = new File(staticPath + rawFile);
-        // Check if file is a directory
-        if (file.isDirectory())
-            return false;
-        // Check if file exists
-        if (file.exists())
+        try (InputStream in = webUtils.class.getClassLoader().getResourceAsStream("static" + rawFile)) {
+            if (in == null) {
+                Log.e("[WEB] File was not found: " + rawFile);
+                return false;
+            }
             return true;
-        // File does not exists
-        return false;
+        } catch (IOException e) {
+            Log.e("[WEB] Error reading file: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
-     * Sends the favicon when requested
-     * @param clientSocket The client socket
-     * @param rawFavicon The path to the favicon
-     * @throws IOException If an error occurs while writing to the client
+     * Sends the favicon when requested.
+     * @param clientSocket The client socket.
+     * @param rawFavicon The path to the favicon relative to static/, e.g., "favicon.ico"
+     * @throws IOException If an error occurs while writing to the client.
      */
     public static void sendFavicon(Socket clientSocket, String rawFavicon) throws IOException {
-        // Get favicon data
-        File favicon = new File(staticPath + rawFavicon);
-        OutputStream out = clientSocket.getOutputStream();
-        byte[] iconBytes = Files.readAllBytes(favicon.toPath());
-        responseDto response = responseDto.response("HTTP/1.1", 200, "Ok",
-            List.of(headerDto.header("Content-Type", "image/x-icon"),
-                    headerDto.header("Content-Length", ""+iconBytes.length),
-                    headerDto.header("Connection", "close")),
-            null);
-        out.write(response.toString().getBytes());
-        out.write(iconBytes);
-        out.flush();
+        try (InputStream in = webUtils.class.getClassLoader().getResourceAsStream("static" + rawFavicon)) {
+            if (in == null) {
+                Log.e("[WEB] Favicon not found: " + rawFavicon);
+                return;
+            }
+            byte[] iconBytes = in.readAllBytes();
+            OutputStream out = clientSocket.getOutputStream();
+            responseDto response = responseDto.response("HTTP/1.1", 200, "Ok",
+                    List.of( headerDto.header("Content-Type", "image/x-icon"),
+                             headerDto.header("Content-Length", "" + iconBytes.length),
+                             headerDto.header("Connection", "close") ),
+                    null);
+            out.write(response.toString().getBytes());
+            out.write(iconBytes);
+            out.flush();
+        } catch (IOException e) {
+            Log.e("[WEB] Error sending favicon: " + e.getMessage());
+        }
     }
 
     /**
@@ -167,21 +170,14 @@ public class webUtils {
      * @return A string containing file data.
      */
     public static String readFile(String rawFile) {
-        try {
-            // Get file object
-            File file = new File(staticPath + rawFile);
-            Scanner reader = new Scanner(file);
-            // Build response
-            StringBuilder response = new StringBuilder();
-            // Get file content
-            while (reader.hasNextLine())
-                response.append(reader.nextLine()).append("\r\n");
-            // Close reader
-            reader.close();
-            // Return file
-            return response.toString();
-        } catch (FileNotFoundException fnf) {
-            Log.e("[WEB] file was not found " + rawFile);
+        try (InputStream in = webUtils.class.getClassLoader().getResourceAsStream("static" + rawFile)) {
+            if (in == null) {
+                Log.e("[WEB] File was not found: " + rawFile);
+                return null;
+            }
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            Log.e("[WEB] Error reading file: " + e.getMessage());
             return null;
         }
     }
