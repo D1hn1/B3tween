@@ -1,7 +1,7 @@
 package com.B3tween.app.modules.www.api.controller.routes;
 
 import java.net.*;
-import org.json.*;
+import org.json.JSONObject;
 
 import com.B3tween.app.modules.log.Log;
 import com.B3tween.app.objects.enums.Method;

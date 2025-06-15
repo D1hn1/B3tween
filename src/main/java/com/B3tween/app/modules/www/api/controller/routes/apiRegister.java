@@ -1,7 +1,7 @@
 package com.B3tween.app.modules.www.api.controller.routes;
 
 import java.net.*;
-import org.json.*;
+import org.json.JSONObject;
 import java.time.Instant;
 
 import com.B3tween.app.modules.log.Log;
