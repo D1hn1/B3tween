@@ -1,4 +1,4 @@
-package com.B3tween.app.modules.proxy.connection.dto;
+package com.B3tween.app.modules.proxy.controller.dto;
 
 import java.io.*;
 import lombok.Builder;
@@ -15,14 +15,11 @@ public class connectionDto {
 
     // Fields
     private int id;
+    private int userId;
     private requestDto request;
     private Socket clientSocket;
     private boolean isKeepAlive;
     private BufferedReader clientIn;
     private BufferedWriter clientOut;
-
-    // Data
-    private int bytesIn;
-    private int bytesOut;
 
 }

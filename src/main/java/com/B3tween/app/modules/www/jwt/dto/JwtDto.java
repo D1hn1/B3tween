@@ -18,6 +18,9 @@ public class JwtDto {
     private String payload;
     private String token;
 
+    /**
+     * Generates a proxy token for a user
+     */
     public void generateToken() {
         if (token == null) {
             String b64EncodedHeader = Base64.getEncoder().encodeToString(header.getBytes()).replace("=","");

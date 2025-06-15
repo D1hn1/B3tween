@@ -1,19 +1,21 @@
-package com.B3tween.app.modules.proxy.connection;
+package com.B3tween.app.modules.proxy.controller.proxies.defaultProxy.controller;
 
 import java.io.*;
 import java.net.*;
+import java.time.Instant;
 import java.io.IOException;
 
 import com.B3tween.app.modules.log.Log;
-import com.B3tween.app.modules.proxy.connection.dto.connectionDto;
+import com.B3tween.app.modules.proxy.controller.dto.connectionDto;
 import com.B3tween.app.modules.proxy.utils.proxyUtils;
 import com.B3tween.app.objects.dto.headerDto;
 import com.B3tween.app.objects.dto.requestDto;
 import com.B3tween.app.objects.global.globalRuntime;
+import com.B3tween.app.modules.auth.dto.AuthDto;
 import com.B3tween.app.modules.exception.bException;
 import com.B3tween.app.modules.socket.initializeSocket;
 
-public class proxyHttpHandler {
+public class defaultHttpHandler {
     
     /**
      * Closes all the connection sockets.
@@ -31,7 +33,7 @@ public class proxyHttpHandler {
      * Handles the HTTP connections.
      * @param connectionData The connection DTO.
      */
-    public static void dispatchRequest(connectionDto connectionData) {
+    public static void dispatchRequest(connectionDto connectionData, AuthDto user) {
 
         try {
             // Initialize IO and Sockets 
@@ -42,9 +44,6 @@ public class proxyHttpHandler {
             BufferedWriter serverOut = forwardSocket.out;
             BufferedReader serverIn = forwardSocket.in;
             BufferedWriter clientOut = connectionData.getClientOut();
-
-            // Client socket timeout
-            connectionData.getClientSocket().setSoTimeout(5000);
 
             while (!connectionData.getClientSocket().isClosed()) {
                 // Get client request
@@ -62,6 +61,10 @@ public class proxyHttpHandler {
                 // Send request
                 serverOut.write(request.toString());
                 serverOut.flush();
+
+                // Update user
+                user.setUpdatedAt(Instant.now().toEpochMilli());
+                user.setTx(user.getTx()+request.toString().getBytes().length);
 
                 // Recv data 
                 String line = "";
@@ -95,6 +98,10 @@ public class proxyHttpHandler {
                 // Send data
                 clientOut.write(response.toString());
                 clientOut.flush();
+
+                // Update user
+                user.setUpdatedAt(Instant.now().toEpochMilli());
+                user.setRx(user.getRx()+response.toString().getBytes().length);
 
                 if (!connectionData.isKeepAlive())
                     break;
